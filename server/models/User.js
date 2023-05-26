@@ -33,10 +33,19 @@ const UserSchema = new mongoose.Schema(
       type: Array,
       default: [],
     },
-    location: String,
-    occupation: String,
-    viewedProfile: Number,
-    impressions: Number,
+    role: { 
+      type: String, 
+      default: "user" 
+    },
+    description: String,
+    viewedProfile: {
+      type:Number,
+      default: 0}
+      ,
+    impressions: { 
+      type:Number, 
+      default: 0 
+    }
   },
   { timestamps: true }
 );
