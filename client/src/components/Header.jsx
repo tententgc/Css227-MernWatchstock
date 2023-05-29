@@ -132,6 +132,13 @@ const Header = () => {
                   >
                     <ul className="bg-dark-soft lg:bg-zinc-100 text-center flex flex-col shadow-lg rounded-lg overflow-hidden">
                       <button
+                        onClick={() => navigate("/profile")}
+                        type="button"
+                        className="hover:bg-dark-hard hover:text-white px-4 py-2 text-white lg:text-dark-soft"
+                      >
+                        My Profile
+                      </button>
+                      <button
                         onClick={() => navigate("/profileedit")}
                         type="button"
                         className="hover:bg-dark-hard hover:text-white px-4 py-2 text-white lg:text-dark-soft"

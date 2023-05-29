@@ -28,10 +28,10 @@ const ProfilePage = () => {
   });
 
   const { mutate, isLoading: updateProfileIsLoading } = useMutation({
-    mutationFn: ({ name, email, password }) => {
+    mutationFn: ({ name, email, password, description }) => {
       return updateProfile({
         token: userState.userInfo.token,
-        userData: { name, email, password },
+        userData: { name, email, password, description },
       });
     },
     onSuccess: (data) => {
@@ -61,17 +61,19 @@ const ProfilePage = () => {
       name: "",
       email: "",
       password: "",
+      description: "", // new description field
     },
     values: {
       name: profileIsLoading ? "" : profileData.name,
       email: profileIsLoading ? "" : profileData.email,
+      description: profileIsLoading ? "" : profileData.description, // new description field
     },
     mode: "onChange",
   });
 
   const submitHandler = (data) => {
-    const { name, email, password } = data;
-    mutate({ name, email, password });
+    const { name, email, password, description } = data;
+    mutate({ name, email, password, description });
   };
 
   return (
@@ -165,10 +167,32 @@ const ProfilePage = () => {
                 </p>
               )}
             </div>
+            <div className="flex flex-col mb-6 w-full">
+              <label
+                htmlFor="description"
+                className="text-[#5a7184] font-semibold block"
+              >
+                Description
+              </label>
+              <input
+                type="text"
+                id="description"
+                {...register("description")}
+                placeholder="Enter description"
+                className={`placeholder:text-[#959ead] text-dark-hard mt-3 rounded-lg px-5 py-4 font-semibold block outline-none border ${
+                  errors.description ? "border-red-500" : "border-[#c3cad9]"
+                }`}
+              />
+              {errors.description?.message && (
+                <p className="text-red-500 text-xs mt-1">
+                  {errors.description?.message}
+                </p>
+              )}
+            </div>
             <button
               type="submit"
               disabled={!isValid || profileIsLoading || updateProfileIsLoading}
-              className="bg-primary text-white font-bold text-lg py-4 px-8 w-full rounded-lg mb-6 disabled:opacity-70 disabled:cursor-not-allowed"
+              className="bg-primary text-white font-bold text-lg py-4 px-8 w-full rounded-lg mb-6 disabled:opacity-70 disabled:cursor-not-allowed hover:bg-orange-500  hover:border-orange-600 border-2 border-primary transition duration-300"
             >
               Update
             </button>

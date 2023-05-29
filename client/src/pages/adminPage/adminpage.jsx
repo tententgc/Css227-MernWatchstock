@@ -1,9 +1,11 @@
 import React from 'react'
-
+import MainLayout from '../../components/MainLayout'
 const adminpage = () => {
   return (
-    <div>adminpage</div>
-  )
+    <MainLayout>
+      <div>adminpage</div>
+    </MainLayout>
+  );
 }
 
 export default adminpage

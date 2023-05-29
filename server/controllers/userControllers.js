@@ -4,7 +4,7 @@ import { fileRemover } from "../utils/fileRemover";
 
 const registerUser = async (req, res, next) => {
   try {
-    const { name, email, password } = req.body;
+    const { name, email, password, description } = req.body;
 
     // check whether the user exists or not
     let user = await User.findOne({ email });
@@ -18,6 +18,7 @@ const registerUser = async (req, res, next) => {
       name,
       email,
       password,
+      description: description || "",
     });
 
     return res.status(201).json({
@@ -25,6 +26,7 @@ const registerUser = async (req, res, next) => {
       avatar: user.avatar,
       name: user.name,
       email: user.email,
+      description: user.description, 
       verified: user.verified,
       admin: user.admin,
       token: await user.generateJWT(),
@@ -50,6 +52,7 @@ const loginUser = async (req, res, next) => {
         avatar: user.avatar,
         name: user.name,
         email: user.email,
+        description: user.description,
         verified: user.verified,
         admin: user.admin,
         token: await user.generateJWT(),
@@ -72,6 +75,7 @@ const userProfile = async (req, res, next) => {
         avatar: user.avatar,
         name: user.name,
         email: user.email,
+        description : user.description,
         verified: user.verified,
         admin: user.admin,
       });
@@ -95,6 +99,7 @@ const updateProfile = async (req, res, next) => {
 
     user.name = req.body.name || user.name;
     user.email = req.body.email || user.email;
+    user.description = req.body.description || user.description;
     if (req.body.password && req.body.password.length < 6) {
       throw new Error("Password length must be at least 6 character");
     } else if (req.body.password) {
@@ -108,6 +113,7 @@ const updateProfile = async (req, res, next) => {
       avatar: updatedUserProfile.avatar,
       name: updatedUserProfile.name,
       email: updatedUserProfile.email,
+      description : updatedUserProfile.description, 
       verified: updatedUserProfile.verified,
       admin: updatedUserProfile.admin,
       token: await updatedUserProfile.generateJWT(),
@@ -143,6 +149,7 @@ const updateProfilePicture = async (req, res, next) => {
             avatar: updatedUser.avatar,
             name: updatedUser.name,
             email: updatedUser.email,
+            description : updatedUser.description,
             verified: updatedUser.verified,
             admin: updatedUser.admin,
             token: await updatedUser.generateJWT(),
@@ -159,6 +166,7 @@ const updateProfilePicture = async (req, res, next) => {
             avatar: updatedUser.avatar,
             name: updatedUser.name,
             email: updatedUser.email,
+            description : updatedUser.description,
             verified: updatedUser.verified,
             admin: updatedUser.admin,
             token: await updatedUser.generateJWT(),

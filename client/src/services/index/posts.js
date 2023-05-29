@@ -1,8 +1,8 @@
 import axios from "axios";
-
+import BASEURL from "../../data/Baseurl";
 export const getAllPosts = async () => {
   try {
-    const { data } = await axios.get("http://localhost:3001/api/posts");
+    const { data } = await axios.get(`${BASEURL}/api/posts`);
     return data;
   } catch (error) {
     if (error.response && error.response.data.message)
@@ -13,7 +13,7 @@ export const getAllPosts = async () => {
 
 export const getSinglePost = async ({ slug }) => {
   try {
-    const { data } = await axios.get(`http://localhost:3001/api/posts/${slug}`);
+    const { data } = await axios.get(`${BASEURL}/api/posts/${slug}`);
     return data;
   } catch (error) {
     if (error.response && error.response.data.message)

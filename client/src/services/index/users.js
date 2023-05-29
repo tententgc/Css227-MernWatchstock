@@ -1,8 +1,9 @@
 import axios from "axios";
+import BASEURL from "../../data/Baseurl";
 
 export const signup = async ({ name, email, password }) => {
   try {
-    const { data } = await axios.post("http://localhost:3001/api/users/register", {
+    const { data } = await axios.post(`${BASEURL}/api/users/register`, {
       name,
       email,
       password,
@@ -17,7 +18,7 @@ export const signup = async ({ name, email, password }) => {
 
 export const login = async ({ email, password }) => {
   try {
-    const { data } = await axios.post("http://localhost:3001/api/users/login", {
+    const { data } = await axios.post(`${BASEURL}/api/users/login`, {
       email,
       password,
     });
@@ -37,7 +38,7 @@ export const getUserProfile = async ({ token }) => {
       },
     };
 
-    const { data } = await axios.get("http://localhost:3001/api/users/profile", config);
+    const { data } = await axios.get(`${BASEURL}/api/users/profile`, config);
     return data;
   } catch (error) {
     if (error.response && error.response.data.message)
@@ -55,7 +56,7 @@ export const updateProfile = async ({ token, userData }) => {
     };
 
     const { data } = await axios.put(
-      "http://localhost:3001/api/users/updateProfile",
+      `${BASEURL}/api/users/updateProfile`,
       userData,
       config
     );
@@ -77,7 +78,7 @@ export const updateProfilePicture = async ({ token, formData }) => {
     };
 
     const { data } = await axios.put(
-      "http://localhost:3001/api/users/updateProfilePicture",
+      `${BASEURL}/api/users/updateProfilePicture`,
       formData,
       config
     );

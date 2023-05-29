@@ -85,7 +85,7 @@ const CreatePost = () => {
           />
           <button
             type="submit"
-            className="bg-white text-orange-600 p-2 rounded"
+            className="bg-primary text-white font-bold text-lg py-4 px-8 w-full rounded-lg mb-6 disabled:opacity-70 disabled:cursor-not-allowed hover:bg-orange-500  hover:border-orange-600 border-2 border-primary transition duration-300"
           >
             Submit
           </button>

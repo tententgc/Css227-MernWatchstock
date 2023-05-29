@@ -14,7 +14,7 @@ import Profile from "./pages/ProfilePage/ProfilePage";
 import FeedPage from "./pages/FeedPage/FeedPage";
 import Createcollection from "./pages/Createcollection/Createcollection";
 import Editcollection from "./pages/Editcollection/Editcollection"; 
-
+import About from "./pages/About/AboutPage"; 
 function App() {
   return (
     <div className="App font-opensans">
@@ -31,6 +31,7 @@ function App() {
         <Route path="feed" element={<FeedPage />} />
         <Route path="createcollection" element={<Createcollection/>} /> 
         <Route path="editcollection" element={<Editcollection/>} /> 
+        <Route path="about" element={<About/>} /> 
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
       <Toaster />

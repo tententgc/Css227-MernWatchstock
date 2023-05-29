@@ -45,6 +45,7 @@ const RegisterPage = () => {
       email: "",
       password: "",
       confirmPassword: "",
+      description: "", 
     },
     mode: "onChange",
   });

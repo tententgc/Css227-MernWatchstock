@@ -1,5 +1,5 @@
 import axios from "axios";
-
+import BASEURL from "../../data/Baseurl"; 
 export const createNewComment = async ({
   token,
   desc,
@@ -15,7 +15,7 @@ export const createNewComment = async ({
     };
 
     const { data } = await axios.post(
-      "/api/comments",
+      `${BASEURL}/api/comments`,
       {
         desc,
         slug,
@@ -41,7 +41,7 @@ export const updateComment = async ({ token, desc, commentId }) => {
     };
 
     const { data } = await axios.put(
-      `http://localhost:3001/api/comments/${commentId}`,
+      `${BASEURL}/api/comments/${commentId}`,
       {
         desc,
       },
@@ -63,7 +63,7 @@ export const deleteComment = async ({ token, commentId }) => {
       },
     };
 
-    const { data } = await axios.delete(`http://localhost:3001/api/comments/${commentId}`, config);
+    const { data } = await axios.delete(`${BASEURL}/api/comments/${commentId}`, config);
     return data;
   } catch (error) {
     if (error.response && error.response.data.message)
