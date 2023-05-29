@@ -1,35 +1,24 @@
-import mongoose from "mongoose";
+import { Schema, model } from "mongoose";
 
-const postSchema = mongoose.Schema(
+const PostSchema = new Schema(
   {
-    userId: {
-      type: String,
-      required: true,
-    },
-    firstName: {
-      type: String,
-      required: true,
-    },
-    lastName: {
-      type: String,
-      required: true,
-    },
-    location: String,
-    description: String,
-    picturePath: String,
-    userPicturePath: String,
-    likes: {
-      type: Map,
-      of: Boolean,
-    },
-    comments: {
-      type: Array,
-      default: [],
-    },
+    title: { type: String, required: true },
+    caption: { type: String, required: true },
+    slug: { type: String, required: true, unique: true },
+    body: { type: Object, required: true },
+    photo: { type: String, required: false },
+    user: { type: Schema.Types.ObjectId, ref: "User" },
+    tags: { type: [String] },
+    categories: [{ type: Schema.Types.ObjectId, ref: "PostCategories" }],
   },
-  { timestamps: true }
+  { timestamps: true, toJSON: { virtuals: true } }
 );
 
-const Post = mongoose.model("Post", postSchema);
+PostSchema.virtual("comments", {
+  ref: "Comment",
+  localField: "_id",
+  foreignField: "post",
+});
 
+const Post = model("Post", PostSchema);
 export default Post;
