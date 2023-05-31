@@ -22,4 +22,21 @@ export const getSinglePost = async ({ slug }) => {
   }
 };
 
-
+export const updatePost = async ({ slug, token, postdata }) => { 
+  try {
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+    const { data } = await axios.put(`${BASEURL}/api/posts/useritem/${slug}`, {
+      postdata, 
+      config
+    });
+    return data;
+  } catch (error) {
+    if (error.response && error.response.data.message)
+      throw new Error(error.response.data.message);
+    throw new Error(error.message);
+  }
+}

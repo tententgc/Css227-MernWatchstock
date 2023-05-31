@@ -18,8 +18,8 @@ const createPost = async (req, res, next) => {
         const post = new Post({
           title: req.body.title || "sample title",
           caption: req.body.caption || "sample caption",
-          brand: req.body.brand,
-          price: req.body.price,
+          brand: req.body.brand || "sample brand",
+          price: req.body.price || 0,
           likecount: req.body.likecount || 0,
           slug: req.body.slug || uuidv4(),
           body: req.body.body || {
@@ -55,40 +55,42 @@ const updatePost = async (req, res, next) => {
     const upload = uploadPicture.single("postPicture");
 
     const handleUpdatePostData = async (data) => {
-      const { title, caption, slug, body, tags, categories, brand, price, likecount } = JSON.parse(data);
-      post.title = title || post.title;
-      post.caption = caption || post.caption;
-      post.slug = slug || post.slug;
-      post.body = body || post.body;
-      post.tags = tags || post.tags;
-      post.categories = categories || post.categories;
-      post.brand = brand || post.brand;
-      post.price = price || post.price;
-      post.likecount = likecount || post.likecount;
+      try {
+        const { title, caption, slug, body, tags, categories, brand, price, likecount } = JSON.parse(data);
+        post.title = title || post.title;
+        post.caption = caption || post.caption;
+        post.slug = slug || post.slug;
+        post.body = body || post.body;
+        post.tags = tags || post.tags;
+        post.categories = categories || post.categories;
+        post.brand = brand || post.brand;
+        post.price = price || post.price;
+        post.likecount = likecount || post.likecount;
 
-      const updatedPost = await post.save();
-      return res.json(updatedPost);
+        const updatedPost = await post.save();
+        return res.json(updatedPost);
+      } catch (error) {
+        next(error);
+      }
     };
 
     upload(req, res, async function (err) {
       if (err) {
         const error = new Error(
-          "An unknown error occured when uploading " + err.message
+          "An unknown error occurred when uploading: " + err.message
         );
         next(error);
       } else {
         // everything went well
         if (req.file) {
-          let filename;
-          filename = post.photo;
+          let filename = post.photo;
           if (filename) {
             fileRemover(filename);
           }
           post.photo = req.file.filename;
           handleUpdatePostData(req.body.document);
         } else {
-          let filename;
-          filename = post.photo;
+          let filename = post.photo;
           post.photo = "";
           fileRemover(filename);
           handleUpdatePostData(req.body.document);
@@ -99,6 +101,7 @@ const updatePost = async (req, res, next) => {
     next(error);
   }
 };
+
 
 const deletePost = async (req, res, next) => {
   try {

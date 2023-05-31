@@ -147,18 +147,11 @@ const Header = () => {
                       </button>
 
                       <button
-                        onClick={() => navigate("/createcollection")}
-                        type="button"
-                        className="hover:bg-dark-hard hover:text-white px-4 py-2 text-white lg:text-dark-soft"
-                      >
-                        Create Collection
-                      </button>
-                      <button
                         onClick={() => navigate("/editcollection")}
                         type="button"
                         className="hover:bg-dark-hard hover:text-white px-4 py-2 text-white lg:text-dark-soft"
                       >
-                        Edit Collection
+                       Edit Collection 
                       </button>
 
                       {userState.userInfo && userState.userInfo.admin ? (

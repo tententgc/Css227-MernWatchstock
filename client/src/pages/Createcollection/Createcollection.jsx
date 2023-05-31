@@ -1,14 +1,19 @@
 import React, { useState } from "react";
 import axios from "axios";
 import MainLayout from "../../components/MainLayout";
+import { v4 as uuidv4 } from "uuid";
 
-const CreatePost = () => {
+const CreateCollection = () => {
   const [title, setTitle] = useState("");
   const [caption, setCaption] = useState("");
   const [body, setBody] = useState("");
-  const [tags, setTags] = useState("");
+  const [tags, setTags] = useState([]);
   const [image, setImage] = useState("");
   const [newCategory, setNewCategory] = useState("");
+  const [brand, setBrand] = useState("");
+  const [price, setPrice] = useState(0);
+  const [likecount, setLikeCount] = useState(0);
+  const [slug, setSlug] = useState(uuidv4());
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -19,6 +24,10 @@ const CreatePost = () => {
     formData.append("tags", tags);
     formData.append("newCategory", newCategory);
     formData.append("postPicture", image);
+    formData.append("brand", brand);
+    formData.append("price", price);
+    formData.append("likecount", likecount);
+    formData.append("slug", slug);
 
     try {
       const account = localStorage.getItem("account");
@@ -28,19 +37,23 @@ const CreatePost = () => {
             headers: { Authorization: `Bearer ${token}` },
           }
         : {};
+      console.log(account)
 
       await axios.post("http://localhost:3001/api/posts", formData, config);
       setTitle("");
       setCaption("");
       setBody("");
-      setTags("");
+      setTags([]);
       setNewCategory("");
       setImage("");
+      setBrand("");
+      setPrice(0);
+      setLikeCount(0);
+      setSlug(uuidv4());
     } catch (err) {
       console.error(err);
     }
   };
-
   return (
     <MainLayout>
       <div className="min-h-screen flex justify-center items-center">
@@ -62,6 +75,20 @@ const CreatePost = () => {
             placeholder="Body"
             value={body}
             onChange={(e) => setBody(e.target.value)}
+            className="p-2 border border-gray-300 rounded"
+          />
+          <input
+            type="text"
+            placeholder="Brand"
+            value={brand}
+            onChange={(e) => setBrand(e.target.value)}
+            className="p-2 border border-gray-300 rounded"
+          />
+          <input
+            type="number"
+            placeholder="Price"
+            value={price}
+            onChange={(e) => setPrice(e.target.value)}
             className="p-2 border border-gray-300 rounded"
           />
           <input
@@ -95,4 +122,4 @@ const CreatePost = () => {
   );
 };
 
-export default CreatePost;
+export default CreateCollection;
