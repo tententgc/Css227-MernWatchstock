@@ -42,6 +42,7 @@ const createPost = async (req, res, next) => {
 };
 
 
+
 const updatePost = async (req, res, next) => {
   try {
     const post = await Post.findOne({ slug: req.params.slug });
@@ -56,7 +57,9 @@ const updatePost = async (req, res, next) => {
 
     const handleUpdatePostData = async (data) => {
       try {
-        const { title, caption, slug, body, tags, categories, brand, price, likecount } = JSON.parse(data);
+        const parsedData = JSON.parse(data.document);
+        const { title, caption, slug, body, tags, categories, brand, price, likecount } = parsedData;
+
         post.title = title || post.title;
         post.caption = caption || post.caption;
         post.slug = slug || post.slug;
@@ -74,7 +77,11 @@ const updatePost = async (req, res, next) => {
       }
     };
 
+
+    
     upload(req, res, async function (err) {
+      console.log(req.body)
+      console.log(req.file)
       if (err) {
         const error = new Error(
           "An unknown error occurred when uploading: " + err.message
@@ -88,13 +95,15 @@ const updatePost = async (req, res, next) => {
             fileRemover(filename);
           }
           post.photo = req.file.filename;
-          handleUpdatePostData(req.body.document);
+          
+          handleUpdatePostData(req.body);
         } else {
           let filename = post.photo;
           post.photo = "";
           fileRemover(filename);
-          handleUpdatePostData(req.body.document);
+          handleUpdatePostData(req.body);
         }
+
       }
     });
   } catch (error) {

@@ -13,14 +13,9 @@ import { authGuard, adminGuard } from "../middleware/authMiddleware";
 router.route("/").post(authGuard,createPost).get(getAllPosts);
 router.route("/user/:userId").get(getPostByUserId); 
 router.route("/:slug").get(getPost); 
-router
-  .route("/useritem/:slug")
-  .put(authGuard, updatePost) 
-  .delete(authGuard, deletePost)
-  .get(getPost);
 
 router.route("/admin/:slug")
-.put(authGuard, adminGuard, updatePost)
+.patch(authGuard, adminGuard, updatePost)
 .delete(authGuard, adminGuard, deletePost)
 .get(getPost);  
 

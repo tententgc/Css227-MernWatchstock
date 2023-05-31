@@ -11,9 +11,9 @@ import Contact from "./pages/contact/contact";
 import NotFoundPage from "./pages/Notfound/notfound";
 import Adminpage from './pages/adminPage/adminpage';
 import Profile from "./pages/ProfilePage/ProfilePage"; 
-import FeedPage from "./pages/FeedPage/FeedPage";
-import About from "./pages/About/AboutPage";
+import FeedPage from "./pages/FeedPage/FeedPage"
 import Editcollection from "./pages/EditCollection/Editcollection";
+import Request from "./pages/Request/request"; 
 import Createcollection from "./pages/CreateCollection/Createcollection";
 
 function App() {
@@ -32,7 +32,7 @@ function App() {
         <Route path="feed" element={<FeedPage />} />
         <Route path="/createcollection" element={<Createcollection/>} />
         <Route path="/editcollection" element={<Editcollection/>} /> 
-        <Route path="about" element={<About/>} /> 
+        <Route path="request" element={<Request />} /> 
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
       <Toaster />
