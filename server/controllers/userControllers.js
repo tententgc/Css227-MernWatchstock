@@ -89,6 +89,7 @@ const userProfile = async (req, res, next) => {
   }
 };
 
+
 const updateProfile = async (req, res, next) => {
   try {
     let user = await User.findById(req.user._id);
@@ -185,4 +186,5 @@ export {
   userProfile,
   updateProfile,
   updateProfilePicture,
+  handleUpdateslug, 
 };
