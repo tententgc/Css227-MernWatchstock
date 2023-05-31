@@ -186,5 +186,4 @@ export {
   userProfile,
   updateProfile,
   updateProfilePicture,
-  handleUpdateslug, 
 };

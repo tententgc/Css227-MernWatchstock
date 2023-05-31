@@ -1,7 +1,7 @@
 import { Schema, model } from "mongoose";
 import { hash, compare } from "bcryptjs";
 import { sign } from "jsonwebtoken";
-import slugify from "slugify";
+
 
 const UserSchema = new Schema(
   {

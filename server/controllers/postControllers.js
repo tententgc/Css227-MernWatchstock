@@ -4,11 +4,9 @@ import Comment from "../models/Comment";
 import { fileRemover } from "../utils/fileRemover";
 import { v4 as uuidv4 } from "uuid";
 
-
 const createPost = async (req, res, next) => {
   try {
     const upload = uploadPicture.single('postPicture');
-    console.log(req.body)
     upload(req, res, async function (err) {
       if (err) {
         const error = new Error("An unknown error occured when uploading " + err.message);
@@ -17,15 +15,15 @@ const createPost = async (req, res, next) => {
       } else {
         const post = new Post({
           title: req.body.title || "sample title",
-          caption: req.body.caption || "sample caption",
           brand: req.body.brand || "sample brand",
+          series: req.body.series || "sample series",
+          model: req.body.model || "sample model",
+          produced: req.body.produced || "sample production year",
+          color: req.body.color || "sample color",
           price: req.body.price || 0,
           likecount: req.body.likecount || 0,
           slug: req.body.slug || uuidv4(),
-          body: req.body.body || {
-            type: "doc",
-            content: [],
-          },
+          detail: req.body.detail || {},
           photo: req.file ? req.file.filename : "",
           user: req.user._id,
           tags: req.body.tags || [],
@@ -40,8 +38,6 @@ const createPost = async (req, res, next) => {
     next(error);
   }
 };
-
-
 
 const updatePost = async (req, res, next) => {
   try {
@@ -58,15 +54,18 @@ const updatePost = async (req, res, next) => {
     const handleUpdatePostData = async (data) => {
       try {
         const parsedData = JSON.parse(data.document);
-        const { title, caption, slug, body, tags, categories, brand, price, likecount } = parsedData;
+        const { title, detail, slug, tags, categories, brand, series, model, produced, color, price, likecount } = parsedData;
 
         post.title = title || post.title;
-        post.caption = caption || post.caption;
         post.slug = slug || post.slug;
-        post.body = body || post.body;
+        post.detail = detail || post.detail;
         post.tags = tags || post.tags;
         post.categories = categories || post.categories;
         post.brand = brand || post.brand;
+        post.series = series || post.series;
+        post.model = model || post.model;
+        post.produced = produced || post.produced;
+        post.color = color || post.color;
         post.price = price || post.price;
         post.likecount = likecount || post.likecount;
 
@@ -77,11 +76,7 @@ const updatePost = async (req, res, next) => {
       }
     };
 
-
-    
     upload(req, res, async function (err) {
-      console.log(req.body)
-      console.log(req.file)
       if (err) {
         const error = new Error(
           "An unknown error occurred when uploading: " + err.message
@@ -95,7 +90,7 @@ const updatePost = async (req, res, next) => {
             fileRemover(filename);
           }
           post.photo = req.file.filename;
-          
+
           handleUpdatePostData(req.body);
         } else {
           let filename = post.photo;
@@ -103,7 +98,6 @@ const updatePost = async (req, res, next) => {
           fileRemover(filename);
           handleUpdatePostData(req.body);
         }
-
       }
     });
   } catch (error) {
@@ -111,13 +105,12 @@ const updatePost = async (req, res, next) => {
   }
 };
 
-
 const deletePost = async (req, res, next) => {
   try {
     const post = await Post.findOneAndDelete({ slug: req.params.slug });
 
     if (!post) {
-      const error = new Error("Post aws not found");
+      const error = new Error("Post was not found");
       return next(error);
     }
 
@@ -193,7 +186,6 @@ const getAllPosts = async (req, res, next) => {
 
 const getPostByUserId = async (req, res, next) => {
   try {
-    console.log(req.params.userId)
     const posts = await Post.find({ user: req.params.userId }).populate([
       {
         path: "user",
@@ -207,4 +199,4 @@ const getPostByUserId = async (req, res, next) => {
   }
 };
 
-export { createPost, updatePost, deletePost, getPost, getAllPosts ,getPostByUserId };
+export { createPost, updatePost, deletePost, getPost, getAllPosts, getPostByUserId };
