@@ -4,6 +4,9 @@ const PostSchema = new Schema(
   {
     title: { type: String, required: true },
     caption: { type: String, required: true },
+    brand : {type: String, required: false}, 
+    price : {type: Number, required: true}, 
+    likecount : {type: Number, required: false}, 
     slug: { type: String, required: true, unique: true },
     body: { type: Object, required: true },
     photo: { type: String, required: false },

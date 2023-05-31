@@ -6,10 +6,12 @@ import {
   getAllPosts,
   getPost,
   updatePost,
+  getPostByUserId, 
 } from "../controllers/postControllers";
 import { authGuard, adminGuard } from "../middleware/authMiddleware";
 
 router.route("/").post(authGuard,createPost).get(getAllPosts);
+router.route("/user/:userId").get(getPostByUserId);
 router
   .route("/:slug")
   .put(authGuard, adminGuard, updatePost)
