@@ -4,7 +4,7 @@ import axios from "axios";
 import MainLayout from "../../components/MainLayout";
 import BaseUrl from "../../data/Baseurl";
 import { images, stables } from "../../constants";
-import { Accordion, Card, Button } from "react-bootstrap";
+
 
 const ListPage = () => {
   const [posts, setPosts] = useState([]);
@@ -112,15 +112,23 @@ const handleUpdatePost = async () => {
 
   return (
     <MainLayout>
-      <div className="p-4">
+      <div className="p-4 h-full min-h-screen">
         <div className="flex items-center justify-between mb-4">
           <h1 className="text-2xl font-bold">All collection</h1>
+           <div className="flex justify-end space-x-4">
           <Link
             to="/createcollection"
             className="px-4 py-2 text-white bg-blue-500 rounded"
           >
             Create Collection
           </Link>
+          <Link
+            to="/requestadmin"
+            className="px-4 py-2 text-white bg-blue-500 rounded"
+          >
+            Request Status
+          </Link>
+        </div>
         </div>
         {posts.map((post) => (
           <div

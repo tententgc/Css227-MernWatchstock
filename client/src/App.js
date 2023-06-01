@@ -16,6 +16,7 @@ import Editcollection from "./pages/EditCollection/Editcollection";
 import Request from "./pages/Request/request"; 
 import Createcollection from "./pages/CreateCollection/Createcollection";
 import Createrequest from "./pages/Request/Createrequest";
+import Requestatus from "./pages/requestStatus/requestatus";
 function App() {
   return (
     <div className="App font-opensans">
@@ -33,6 +34,7 @@ function App() {
         <Route path="/createcollection" element={<Createcollection/>} />
         <Route path="/createrequest" element={<Createrequest/>} /> 
         <Route path="/editcollection" element={<Editcollection/>} /> 
+        <Route path="/requestadmin" element={<Requestatus/>} />
         <Route path="request" element={<Request />} /> 
         <Route path="*" element={<NotFoundPage />} />
       </Routes>

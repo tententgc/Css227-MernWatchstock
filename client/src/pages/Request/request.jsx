@@ -18,7 +18,7 @@ const ListPage = () => {
         const config = {
           headers: { Authorization: `Bearer ${token}` },
         };
-        const response = await axios.get(`${BaseUrl}/api/requests/`, config);
+        const response = await axios.get(`${BaseUrl}/api/requests/user/${user_id}`, config);
         setPosts(response.data);
       } catch (error) {
         console.log(error);
@@ -54,7 +54,7 @@ const ListPage = () => {
       <div className="flex flex-col h-full">
         <div className="p-4 flex-grow">
           <div className="flex items-center justify-between mb-4">
-            <h1 className="text-2xl font-bold">All collection</h1>
+            <h1 className="text-2xl font-bold">All Your Request Status </h1>
             <Link
               to="/createrequest"
               className="px-4 py-2 text-white bg-blue-500 rounded"
