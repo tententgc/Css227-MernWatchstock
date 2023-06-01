@@ -4,6 +4,7 @@ import axios from "axios";
 import MainLayout from "../../components/MainLayout";
 import BaseUrl from "../../data/Baseurl";
 import { images, stables } from "../../constants";
+import { Accordion, Card, Button } from "react-bootstrap";
 
 const ListPage = () => {
   const [posts, setPosts] = useState([]);
@@ -59,12 +60,13 @@ const handleUpdatePost = async () => {
 
     const formData = new FormData();
     const postData = { ...selectedPost };
+
     if (postData.postPicture && postData.postPicture[0]) {
       formData.append("postPicture", postData.postPicture[0]);
-      delete postData.postPicture;
     }
 
-    // The remaining properties of selectedPost are appended as a JSON string under the key 'document'
+    delete postData.postPicture;
+
     formData.append("document", JSON.stringify(postData));
 
     const response = await axios.patch(
@@ -101,6 +103,11 @@ const handleUpdatePost = async () => {
       ...prevSelectedPost,
       postPicture: [file],
     }));
+  };
+
+  const handleAccordionClick = (e) => {
+    e.preventDefault();
+    e.target.classList.toggle("collapsed");
   };
 
   return (
@@ -160,32 +167,38 @@ const handleUpdatePost = async () => {
               }}
               className="space-y-4"
             >
-              {[
-                "title",
-                "caption",
-                "body",
-                "tags",
-                "categories",
-                "brand",
-                "price",
-              ].map((name) => (
-                <div key={name}>
-                  <label
-                    htmlFor={name}
-                    className="block text-sm font-medium text-gray-700"
-                  >
-                    {name.charAt(0).toUpperCase() + name.slice(1)}:
-                  </label>
-                  <input
-                    type={name === "price" ? "number" : "text"}
-                    id={name}
-                    name={name}
-                    value={selectedPost[name]}
-                    onChange={handleInputChange}
-                    className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-orange-500 focus:border-orange-500 sm:text-sm"
-                  />
-                </div>
-              ))}
+              <div className="flex flex-wrap -mx-3">
+                {[
+                  "title",
+                  "caption",
+                  "tags",
+                  "categories",
+                  "brand",
+                  "price",
+                  "series",
+                  "model",
+                  "produced",
+                  "color",
+                  "detail",
+                ].map((name, index) => (
+                  <div key={name} className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
+                    <label
+                      htmlFor={name}
+                      className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                    >
+                      {name.charAt(0).toUpperCase() + name.slice(1)}:
+                    </label>
+                    <input
+                      type={name === "price" ? "number" : "text"}
+                      id={name}
+                      name={name}
+                      value={selectedPost[name]}
+                      onChange={handleInputChange}
+                      className="appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
+                    />
+                  </div>
+                ))}
+              </div>
               <div>
                 <label
                   htmlFor="postPicture"
@@ -201,7 +214,7 @@ const handleUpdatePost = async () => {
                   onChange={handleFileChange}
                   className="mt-1 block border-gray-300 rounded-md shadow-sm sm:text-sm"
                 />
-              </div>
+              </div>{" "}
               <div className="flex justify-end">
                 <button
                   type="submit"
@@ -226,3 +239,4 @@ const handleUpdatePost = async () => {
 
 export default ListPage;
 
+                  

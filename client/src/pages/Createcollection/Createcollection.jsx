@@ -5,28 +5,32 @@ import { v4 as uuidv4 } from "uuid";
 
 const CreateCollection = () => {
   const [title, setTitle] = useState("");
-  const [caption, setCaption] = useState("");
-  const [body, setBody] = useState("");
-  const [tags, setTags] = useState([]);
-  const [image, setImage] = useState("");
-  const [newCategory, setNewCategory] = useState("");
   const [brand, setBrand] = useState("");
+  const [series, setSeries] = useState("");
+  const [model, setModel] = useState("");
+  const [produced, setProduced] = useState("");
+  const [color, setColor] = useState("");
   const [price, setPrice] = useState(0);
   const [likecount, setLikeCount] = useState(0);
+  const [detail, setDetail] = useState("");
+  const [image, setImage] = useState("");
+  const [tags, setTags] = useState([]);
   const [slug, setSlug] = useState(uuidv4());
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData();
     formData.append("title", title);
-    formData.append("caption", caption);
-    formData.append("body", body);
-    formData.append("tags", tags);
-    formData.append("newCategory", newCategory);
-    formData.append("postPicture", image);
     formData.append("brand", brand);
+    formData.append("series", series);
+    formData.append("model", model);
+    formData.append("produced", produced);
+    formData.append("color", color);
     formData.append("price", price);
     formData.append("likecount", likecount);
+    formData.append("detail", detail);
+    formData.append("postPicture", image);
+    formData.append("tags", tags);
     formData.append("slug", slug);
 
     try {
@@ -37,18 +41,20 @@ const CreateCollection = () => {
             headers: { Authorization: `Bearer ${token}` },
           }
         : {};
-      console.log(account)
+      console.log(account);
 
       await axios.post("http://localhost:3001/api/posts", formData, config);
       setTitle("");
-      setCaption("");
-      setBody("");
-      setTags([]);
-      setNewCategory("");
-      setImage("");
       setBrand("");
+      setSeries("");
+      setModel("");
+      setProduced("");
+      setColor("");
       setPrice(0);
       setLikeCount(0);
+      setDetail("");
+      setImage("");
+      setTags([]);
       setSlug(uuidv4());
     } catch (err) {
       console.error(err);
@@ -63,18 +69,6 @@ const CreateCollection = () => {
             placeholder="Title"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            className="p-2 border border-gray-300 rounded"
-          />
-          <textarea
-            placeholder="Caption"
-            value={caption}
-            onChange={(e) => setCaption(e.target.value)}
-            className="p-2 border border-gray-300 rounded"
-          />
-          <textarea
-            placeholder="Body"
-            value={body}
-            onChange={(e) => setBody(e.target.value)}
             className="p-2 border border-gray-300 rounded"
           />
           <input
@@ -100,9 +94,36 @@ const CreateCollection = () => {
           />
           <input
             type="text"
-            placeholder="New Category"
-            value={newCategory}
-            onChange={(e) => setNewCategory(e.target.value)}
+            placeholder="Series"
+            value={series}
+            onChange={(e) => setSeries(e.target.value)}
+            className="p-2 border border-gray-300 rounded"
+          />
+          <input
+            type="text"
+            placeholder="Model"
+            value={model}
+            onChange={(e) => setModel(e.target.value)}
+            className="p-2 border border-gray-300 rounded"
+          />
+          <input
+            type="text"
+            placeholder="Produced"
+            value={produced}
+            onChange={(e) => setProduced(e.target.value)}
+            className="p-2 border border-gray-300 rounded"
+          />
+          <input
+            type="text"
+            placeholder="Color"
+            value={color}
+            onChange={(e) => setColor(e.target.value)}
+            className="p-2 border border-gray-300 rounded"
+          />
+          <textarea
+            placeholder="Detail"
+            value={detail}
+            onChange={(e) => setDetail(e.target.value)}
             className="p-2 border border-gray-300 rounded"
           />
           <input

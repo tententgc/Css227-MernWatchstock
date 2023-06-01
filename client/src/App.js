@@ -15,7 +15,7 @@ import FeedPage from "./pages/FeedPage/FeedPage"
 import Editcollection from "./pages/EditCollection/Editcollection";
 import Request from "./pages/Request/request"; 
 import Createcollection from "./pages/CreateCollection/Createcollection";
-
+import Createrequest from "./pages/Request/Createrequest";
 function App() {
   return (
     <div className="App font-opensans">
@@ -31,6 +31,7 @@ function App() {
         <Route path="profile" element={<Profile />} /> 
         <Route path="feed" element={<FeedPage />} />
         <Route path="/createcollection" element={<Createcollection/>} />
+        <Route path="/createrequest" element={<Createrequest/>} /> 
         <Route path="/editcollection" element={<Editcollection/>} /> 
         <Route path="request" element={<Request />} /> 
         <Route path="*" element={<NotFoundPage />} />
