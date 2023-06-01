@@ -42,6 +42,7 @@ const createRequest = async (req, res, next) => {
 };
 
 
+
 const deleterequest = async (req, res, next) => {
     try {
         const request = await Request.findOneAndDelete({ slug: req.params.slug });
@@ -71,7 +72,7 @@ const getRequest = async (req, res, next) => {
         ]);
 
         if (!request) {
-            const error = new Error("Post was not found");
+            const error = new Error("request was not found");
             return next(error);
         }
 
@@ -96,6 +97,31 @@ const getAllrequests = async (req, res, next) => {
     }
 };
 
+const updateRequestStatus = async (req, res, next) => {
+    try {
+        // You can validate the new status here if needed
+        const newStatus = req.body.status;
+        const slug = req.params.slug;
+
+        // Update the status
+        const updatedRequest = await Request.findOneAndUpdate(
+            { slug },
+            { status: newStatus },
+            { new: true, runValidators: true }
+        );
+
+        if (!updatedRequest) {
+            const error = new Error("Request was not found");
+            error.statusCode = 404; // Set a specific status code for not found
+            throw error; // Throw the error to be caught by the error handling middleware
+        }
+
+        return res.json(updatedRequest);
+    } catch (error) {
+        next(error);
+    }
+};
+
 const getrequestByUserId = async (req, res, next) => {
     try {
         const requests = await Request.find({ user: req.params.userId }).populate([
@@ -111,4 +137,4 @@ const getrequestByUserId = async (req, res, next) => {
     }
 };
 
-export { createRequest, deleterequest, getRequest, getAllrequests, getrequestByUserId }; 
+export { createRequest, deleterequest, getRequest, getAllrequests, getrequestByUserId,updateRequestStatus};

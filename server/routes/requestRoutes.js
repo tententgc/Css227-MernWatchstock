@@ -6,6 +6,7 @@ import {
     getAllrequests,
     getRequest,
     deleterequest,
+    updateRequestStatus
 } from "../controllers/RequestControllers";
 
 import { authGuard, adminGuard } from "../middleware/authMiddleware"; 
@@ -15,7 +16,11 @@ router.route("/user/:userId").get(authGuard,getrequestByUserId);
 router.route("/").get(authGuard,getAllrequests); 
 router.route("/:slug")
 .get(authGuard,getRequest)
-.delete(authGuard,deleterequest);  
+.delete(authGuard,deleterequest);
+
+router.route("/status/:slug") 
+.put(authGuard,adminGuard,updateRequestStatus)
+.patch(authGuard,adminGuard,updateRequestStatus); 
 
 
 export default router; 
