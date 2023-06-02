@@ -1,11 +1,17 @@
 import React from "react";
-import { BsCheckLg } from "react-icons/bs";
-import { AiOutlineClose } from "react-icons/ai";
+import { Link } from "react-router-dom";
+import { BsCheckCircle } from "react-icons/bs";
+import { AiOutlineCloseCircle } from "react-icons/ai";
+
 
 import { images, stables } from "../constants";
-import { Link } from "react-router-dom";
 
 const ArticleCard = ({ post, className }) => {
+  const formatDate = (dateString) => {
+    const options = { day: "numeric", month: "long" };
+    return new Date(dateString).toLocaleDateString(undefined, options);
+  };
+
   return (
     <div
       className={`rounded-xl overflow-hidden shadow-[rgba(7,_65,_210,_0.1)_0px_9px_30px] ${className}`}
@@ -14,7 +20,7 @@ const ArticleCard = ({ post, className }) => {
         <img
           src={
             post.photo
-              ? stables.UPLOAD_FOLDER_BASE_URL + post.photo
+              ? `${stables.UPLOAD_FOLDER_BASE_URL}${post.photo}`
               : images.samplePostImage
           }
           alt="title"
@@ -35,7 +41,7 @@ const ArticleCard = ({ post, className }) => {
             <img
               src={
                 post.user.avatar
-                  ? stables.UPLOAD_FOLDER_BASE_URL + post.user.avatar
+                  ? `${stables.UPLOAD_FOLDER_BASE_URL}${post.user.avatar}`
                   : images.userImage
               }
               alt="post profile"
@@ -52,9 +58,9 @@ const ArticleCard = ({ post, className }) => {
                   } w-fit bg-opacity-20 p-1.5 rounded-full`}
                 >
                   {post.user.verified ? (
-                    <BsCheckLg className="w-1.5 h-1.5 text-[#36B37E]" />
+                    <BsCheckCircle className="w-1.5 h-1.5 text-[#36B37E]" />
                   ) : (
-                    <AiOutlineClose className="w-1.5 h-1.5 text-red-500" />
+                    <AiOutlineCloseCircle className="w-1.5 h-1.5 text-red-500" />
                   )}
                 </span>
                 <span className="italic text-dark-light text-xs md:text-sm">
@@ -64,10 +70,7 @@ const ArticleCard = ({ post, className }) => {
             </div>
           </div>
           <span className="font-bold text-dark-light italic text-sm md:text-base">
-            {new Date(post.createdAt).getDate()}{" "}
-            {new Date(post.createdAt).toLocaleString("default", {
-              month: "long",
-            })}
+            {formatDate(post.createdAt)}
           </span>
         </div>
       </div>

@@ -1,16 +1,18 @@
 import React from "react";
-
 import MainLayout from "../../components/MainLayout";
-import Articles from "./container/Articles";
-import CTA from "./container/CTA";
-import Hero from "./container/Hero";
+
+
+
+import CarouselHead from "./container/CarouselHead";
+import Suggest from "./container/Suggest"; 
 
 const HomePage = () => {
   return (
     <MainLayout>
-      {/* <Hero /> */}
-      {/* <Articles /> */}
-      {/* <CTA /> */}
+      <div style={{ width: "60%", margin: "0 auto" }}>
+        <CarouselHead />
+      </div>
+      <Suggest /> 
     </MainLayout>
   );
 };

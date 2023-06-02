@@ -9,7 +9,7 @@ import { logout } from "../store/actions/user";
 
 const navItemsInfo = [
   { name: "Home", type: "link", href: "/" },
-  { name: "New Items", type: "link", href: "/feed" },
+  { name: "All Collection", type: "link", href: "/feed" },
   { name: "Request", type: "link", href: "/request" },
   {
     name: "Contact Us",
@@ -92,7 +92,9 @@ const Header = () => {
     <section className="sticky top-0 left-0 right-0 z-50 bg-white">
       <header className="container mx-auto px-5 flex justify-between py-4 items-center">
         <Link to="/">
-          <img className="w-16" src={images.Logo} alt="logo" />
+          <h1 className="text-2xl font-bold text-dark-soft">
+             Watch<span className="text-orange-500">Stock</span>
+          </h1> 
         </Link>
         <div className="lg:hidden z-50">
           {navIsVisible ? (

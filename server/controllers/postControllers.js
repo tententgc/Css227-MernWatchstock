@@ -7,6 +7,7 @@ import { v4 as uuidv4 } from "uuid";
 const createPost = async (req, res, next) => {
   try {
     const upload = uploadPicture.single('postPicture');
+    console.log(req.body);
     upload(req, res, async function (err) {
       if (err) {
         const error = new Error("An unknown error occured when uploading " + err.message);
@@ -24,7 +25,7 @@ const createPost = async (req, res, next) => {
           likecount: req.body.likecount || 0,
           slug: req.body.slug || uuidv4(),
           detail: req.body.detail || {},
-          photo: req.file ? req.file.filename : "",
+          photo: req.file ? req.file.filename : "" || req.body.photo,
           user: req.user._id,
           tags: req.body.tags || [],
           categories: req.body.categories || [],
@@ -54,7 +55,7 @@ const updatePost = async (req, res, next) => {
     const handleUpdatePostData = async (data) => {
       try {
         const parsedData = JSON.parse(data.document);
-        const { title, detail, slug, tags, categories, brand, series, model, produced, color, price, likecount } = parsedData;
+        const { title, detail, slug, tags, categories, brand, series, model,photo, produced, color, price, likecount } = parsedData;
 
         post.title = title || post.title;
         post.slug = slug || post.slug;
@@ -68,6 +69,7 @@ const updatePost = async (req, res, next) => {
         post.color = color || post.color;
         post.price = price || post.price;
         post.likecount = likecount || post.likecount;
+        post.photo = photo || post.photo; 
 
         const updatedPost = await post.save();
         return res.json(updatedPost);

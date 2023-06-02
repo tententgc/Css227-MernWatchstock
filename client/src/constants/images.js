@@ -5,6 +5,7 @@ import PostProfileImage from "../assets/posts/post-profile.svg";
 import CtaImage from "../assets/CtaImage.jpg";
 import Watch from "../assets/watch.jpg";
 import Contact from "../assets/contact.jpg";
+import Image1Carousel from "../assets/carousel/img1.jpg"; 
 const samplePostImage = "/images/sample.jpg";
 const userImage = "/images/user.png";
 
@@ -18,6 +19,8 @@ const images = {
   CtaImage,
   samplePostImage,
   userImage,
+  Image1Carousel
+
 };
 
 export default images;
