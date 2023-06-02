@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import { generateHTML } from "@tiptap/html";
 import Bold from "@tiptap/extension-bold";
 import Document from "@tiptap/extension-document";
@@ -7,6 +7,9 @@ import Paragraph from "@tiptap/extension-paragraph";
 import Text from "@tiptap/extension-text";
 import Italic from "@tiptap/extension-italic";
 import parse from "html-react-parser";
+import axios from "axios";
+import BaseUrl from "../../data/Baseurl";
+
 
 import BreadCrumbs from "../../components/BreadCrumbs";
 import CommentsContainer from "../../components/comments/CommentsContainer";
@@ -23,6 +26,7 @@ const ArticleDetailPage = () => {
   const userState = useSelector((state) => state.user);
   const [breadCrumbsData, setbreadCrumbsData] = useState([]);
   const [body, setBody] = useState(null);
+  const navigate = useNavigate();
 
   const { data, isLoading, isError } = useQuery({
     queryFn: () => getSinglePost({ slug }),
@@ -45,6 +49,44 @@ const ArticleDetailPage = () => {
     queryFn: () => getAllPosts(),
     queryKey: ["posts"],
   });
+
+const handleAddToCollection = async () => {
+  const payload = {
+    title: data?.title,
+    photo: data?.photo,
+    categories: data?.categories,
+    tags: data?.tags,
+    model: data?.model,
+    brand: data?.brand,
+    series: data?.series,
+    produced: data?.produced,
+    color: data?.color,
+    price: data?.price,
+    details: data?.details,
+
+
+  };
+
+  try {
+    const account = localStorage.getItem("account");
+    const token = JSON.parse(account).token;
+
+    const response = await axios.post(`${BaseUrl}/api/collections`, payload, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+
+    if (response.status === 200) {
+      console.log("Article added to collection successfully");
+       // Use navigate to redirect to the success page
+    } else {
+      console.error("Failed to add article to collection");
+    }
+  } catch (error) {
+    console.error("Error occurred while adding article to collection:", error);
+  }
+};
+
+
 
   return (
     <MainLayout>
@@ -76,6 +118,7 @@ const ArticleDetailPage = () => {
                   <Link
                     to={`/blog?category=${category.name}`}
                     className="text-primary text-sm font-roboto inline-block md:text-base"
+                    key={category.name}
                   >
                     {category.name}
                   </Link>
@@ -122,9 +165,11 @@ const ArticleDetailPage = () => {
                 </ul>
               </div>
 
-              {/* Add to My Collection Button */}
               <div className="mt-4">
-                <button className="bg-orange-600 text-white font-medium py-2 px-4 rounded-lg">
+                <button
+                  className="bg-orange-600 text-white font-medium py-2 px-4 rounded-lg"
+                  onClick={handleAddToCollection}
+                >
                   Add to my collection
                 </button>
               </div>

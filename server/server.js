@@ -12,6 +12,7 @@ import userRoutes from "./routes/userRoutes";
 import postRoutes from "./routes/postRoutes";
 import commentRoutes from "./routes/commentRoutes";
 import requestRoutes from "./routes/requestRoutes"; 
+import CollectionRoutes  from "./routes/CollectionRoutes"; 
 
 dotenv.config();
 connectDB();
@@ -28,7 +29,7 @@ app.use("/api/users", userRoutes);
 app.use("/api/posts", postRoutes);
 app.use("/api/comments", commentRoutes);
 app.use("/api/requests", requestRoutes); 
-// static assets
+app.use("/api/collections", CollectionRoutes);
 app.use("/uploads", express.static(path.join(__dirname, "/uploads")));
 
 app.use(invalidPathHandler);

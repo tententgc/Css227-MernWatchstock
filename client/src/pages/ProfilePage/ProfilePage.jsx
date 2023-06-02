@@ -3,6 +3,7 @@ import axios from "axios";
 import MainLayout from "../../components/MainLayout";
 import { images, stables } from "../../constants";
 
+import Mycollection from "./container/Mycollection";
 const ProfilePage = () => {
   const [profile, setProfile] = useState(null);
 
@@ -79,6 +80,7 @@ const ProfilePage = () => {
           </div>
         </div>
       </div>
+      <Mycollection />
     </MainLayout>
   );
 };

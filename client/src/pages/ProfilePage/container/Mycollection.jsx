@@ -1,19 +1,36 @@
 import React, { useState } from "react";
-import { FaArrowRight } from "react-icons/fa";
+import axios from "axios"; 
 
-import ArticleCard from "../../components/ArticleCard";
+import ArticleCard from "../../../components/ArticleCard";
 import { useQuery } from "@tanstack/react-query";
-import { getAllPosts } from "../../services/index/posts";
+import { getAllPosts } from "../../../services/index/posts";
 import { toast } from "react-hot-toast";
-import ArticleCardSkeleton from "../../components/ArticleCardSkeleton";
-import ErrorMessage from "../../components/ErrorMessage";
-import MainLayout from "../../components/MainLayout";
-
+import ArticleCardSkeleton from "../../../components/ArticleCardSkeleton";
+import ErrorMessage from "../../../components/ErrorMessage";
 const Articles = () => {
   const [searchQuery, setSearchQuery] = useState("");
 
+  const fetchPosts = async () => {
+    try {
+      const account = localStorage.getItem("account"); 
+      const user_id = JSON.parse(account)._id;
+      const token = JSON.parse(account).token; 
+        const config = token ? { 
+            headers: { Authorization: `Bearer ${token}` },
+        } : {};
+    
+      const response = await axios.get(
+        `http://localhost:3001/api/collections/user/${user_id}`, 
+        config 
+      );
+      return response.data;
+    } catch (error) {
+      throw new Error(error.response.data.message);
+    }
+  };
+
   const { data, isLoading, isError } = useQuery({
-    queryFn: () => getAllPosts(),
+    queryFn: fetchPosts,
     queryKey: ["posts"],
     onError: (error) => {
       toast.error(error.message);
@@ -26,11 +43,10 @@ const Articles = () => {
   );
 
   return (
-    <MainLayout>
       <section className="flex flex-col container mx-auto px-5 py-10 bg-primary-300">
         <div className="flex flex-col items-center justify-center space-y-5 mt-5">
           <h1 className="text-4xl font-bold text-center text-black">
-            All Collection
+            My Collection
           </h1>
         </div>
 
@@ -67,12 +83,7 @@ const Articles = () => {
           )}
         </div>
 
-        <button className="mx-auto flex items-center gap-x-2 font-bold text-primary-300 border-2 border-primary-300 px-6 py-3 rounded-lg mt-10">
-          <span>More Watch</span>
-          <FaArrowRight className="w-3 h-3" />
-        </button>
       </section>
-    </MainLayout>
   );
 };
 

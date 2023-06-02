@@ -40,3 +40,5 @@ export const updatePost = async ({ slug, token, postdata }) => {
     throw new Error(error.message);
   }
 }
+
+
