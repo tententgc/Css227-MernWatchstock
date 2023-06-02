@@ -32,17 +32,17 @@ const Articles = () => {
     <section className="flex flex-col container mx-auto px-5 py-10 bg-primary-300">
       <div className="flex flex-col items-center justify-center space-y-5 mt-5">
         <h1 className="text-4xl font-bold text-center text-black">
-          Popular Collection
+          News Collection
         </h1>
       </div>
 
       <div className="flex justify-center mt-10">
         <input
           type="text"
-          placeholder="Search by title..."
+          placeholder="Search by name..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          className="border border-gray-300 px-4 py-2 rounded-lg shadow-lg w-full md:w-1/2"
+          className="border border-gray-300 px-4 py-2 rounded-lg shadow-lg w-full md:w-1/2 focus:border-orange-600"
         />
       </div>
 
@@ -57,7 +57,7 @@ const Articles = () => {
         ) : isError ? (
           <ErrorMessage message="Couldn't fetch the posts data" />
         ) : filteredData.length === 0 ? (
-          <p className="text-center text-white">No articles found.</p>
+          <p className="text-center text-white">No Collection found.</p>
         ) : (
           filteredData.map((post) => (
             <ArticleCard
@@ -68,7 +68,6 @@ const Articles = () => {
           ))
         )}
       </div>
-
     </section>
   );
 };

@@ -62,7 +62,7 @@ const handleAddToCollection = async () => {
     produced: data?.produced,
     color: data?.color,
     price: data?.price,
-    details: data?.details,
+    detail: data?.detail,
 
 
   };
@@ -148,13 +148,13 @@ const handleAddToCollection = async () => {
                     <strong>Color:</strong> {data?.color}
                   </li>
                   <li>
-                    <strong>Price:</strong> {data?.price}
+                    <p>
+                      <strong>Price:</strong> {data?.price}{" "}
+                      <strong>{"Bath"}</strong>
+                    </p>
                   </li>
                   <li>
-                    <strong>Details:</strong> {data?.details}
-                  </li>
-                  <li>
-                    <strong>Status:</strong> {data?.status}
+                    <strong>Details:</strong> {data?.detail}
                   </li>
                   <li>
                     <strong>Tags:</strong> {data?.tags}

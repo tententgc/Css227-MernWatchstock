@@ -32,6 +32,9 @@ module.exports = {
         opensans: ["'Open Sans'", "sans-serif"],
         roboto: ["'Roboto'", "sans-serif"],
       },
+      heightcarousel: {
+        'custom-height': '500px', 
+      },
     },
   },
   plugins: [require("@tailwindcss/typography")],

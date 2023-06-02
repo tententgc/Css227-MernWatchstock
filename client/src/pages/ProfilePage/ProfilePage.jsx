@@ -39,9 +39,8 @@ const ProfilePage = () => {
       <div className="container mx-auto p-4">
         <div className="flex justify-center">
           <div className="bg-orange-600 p-4 rounded shadow-md w-full md:w-2/3 lg:w-1/2">
-            <h2 className="text-white text-2xl mb-4"></h2>
-            <div className="text-white flex items-center">
-              <div className="rounded-full overflow-hidden mr-4">
+            <div className="flex flex-col items-center">
+              <div className="rounded-full overflow-hidden mb-4">
                 <div
                   style={{
                     width: "150px",
@@ -61,19 +60,21 @@ const ProfilePage = () => {
                       objectFit: "cover",
                       width: "100%",
                       height: "100%",
+                      borderRadius: "50%",
+                      borderBlockColor: "white", 
                     }}
                   />
                 </div>
               </div>
-              <div>
-                <p>
+              <div className="text-white">
+                <p className="mb-2">
                   <b>Name:</b> {profile.name}
                 </p>
-                <p>
+                <p className="mb-2">
                   <b>Email:</b> {profile.email}
                 </p>
-                <p> 
-                  <b>Description:</b> {profile.description} 
+                <p>
+                  <b>Description:</b> {profile.description}
                 </p>
               </div>
             </div>

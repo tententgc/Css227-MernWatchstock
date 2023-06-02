@@ -5,31 +5,36 @@ import images from "../../../constants/images";
 
 const CarouselHead = () => {
   return (
-    <div>
-      <Carousel showThumbs={false}>
+    <div className="carousel-container w-full">
+      <Carousel
+        showThumbs={false}
+        autoPlay={true}
+        infiniteLoop={true}
+        showStatus={false}
+        showIndicators={false}
+        style={{ height: "400px" }}
+        className="w-full h-full"
+      >
         <div>
           <img
             src={images.Image1Carousel}
             alt="image1"
-            style={{ width: "100%", height: "auto" }}
+            className="object-cover w-full h-80 sm:h-96 md:h-120"
           />
-          {/* <p className="legend">Legend 1</p> */}
         </div>
         <div>
           <img
-            src={images.Watch}
+            src={images.Image2Carousel}
             alt="image2"
-            style={{ width: "100%", height: "auto" }}
+            className="object-cover w-full h-80 sm:h-96 md:h-120"
           />
-          {/* <p className="legend">Legend 2</p> */}
         </div>
         <div>
           <img
-            src={images.Contact}
+            src={images.Image3Carousel}
             alt="image3"
-            style={{ width: "100%", height: "auto" }}
+            className="object-cover w-full h-80 sm:h-96 md:h-120"
           />
-          {/* <p className="legend">Legend 3</p> */}
         </div>
       </Carousel>
     </div>
