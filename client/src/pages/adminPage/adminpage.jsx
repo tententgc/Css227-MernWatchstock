@@ -76,7 +76,7 @@ const handleUpdatePost = async () => {
         headers: { Authorization: `Bearer ${token}` },
       }
     );
-
+  
     setPosts((prevPosts) =>
       prevPosts.map((post) =>
         post.slug === selectedPost.slug ? response.data : post
@@ -178,9 +178,7 @@ const handleUpdatePost = async () => {
               <div className="flex flex-wrap -mx-3">
                 {[
                   "title",
-                  "caption",
-                  "tags",
-                  "categories",
+                  "tags",    
                   "brand",
                   "price",
                   "series",

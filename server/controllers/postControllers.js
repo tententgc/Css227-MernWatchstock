@@ -52,31 +52,66 @@ const updatePost = async (req, res, next) => {
 
     const upload = uploadPicture.single("postPicture");
 
-    const handleUpdatePostData = async (data) => {
-      try {
-        const parsedData = JSON.parse(data.document);
-        const { title, detail, slug, tags, categories, brand, series, model,photo, produced, color, price, likecount } = parsedData;
+const handleUpdatePostData = async (data) => {
+  try {
+    const parsedData = JSON.parse(data.document);
+    const {
+      title,
+      detail,
+      slug,
+      tags,
+      categories,
+      brand,
+      series,
+      model,
+      photo,
+      produced,
+      color,
+      price,
+      likecount
+    } = parsedData;
 
-        post.title = title || post.title;
-        post.slug = slug || post.slug;
-        post.detail = detail || post.detail;
-        post.tags = tags || post.tags;
-        post.categories = categories || post.categories;
-        post.brand = brand || post.brand;
-        post.series = series || post.series;
-        post.model = model || post.model;
-        post.produced = produced || post.produced;
-        post.color = color || post.color;
-        post.price = price || post.price;
-        post.likecount = likecount || post.likecount;
-        post.photo = photo || post.photo; 
+    console.log("before update", post.photo);
 
-        const updatedPost = await post.save();
-        return res.json(updatedPost);
-      } catch (error) {
-        next(error);
-      }
-    };
+    // Check if the new photo file exists
+    if (photo && !(await fileExists(photo))) {
+      console.log(`File ${photo} doesn't exist, won't update post.photo.`);
+    } else {
+      post.photo = photo || post.photo;
+    }
+
+    // Update other properties
+    post.title = title || post.title;
+    post.slug = slug || post.slug;
+    post.detail = detail || post.detail;
+    post.tags = tags || post.tags;
+    post.categories = categories || post.categories;
+    post.brand = brand || post.brand;
+    post.series = series || post.series;
+    post.model = model || post.model;
+    post.produced = produced || post.produced;
+    post.color = color || post.color;
+    post.price = price || post.price;
+    post.likecount = likecount || post.likecount;
+
+    console.log("after update", post.photo);
+    
+    const updatedPost = await post.save();
+    return res.json(updatedPost);
+  } catch (error) {
+    next(error);
+  }
+};
+
+// Function to check if a file exists
+async function fileExists(filePath) {
+  try {
+    await fs.access(filePath);
+    return true;
+  } catch (error) {
+    return false;
+  }
+}
 
     upload(req, res, async function (err) {
       if (err) {
@@ -95,9 +130,7 @@ const updatePost = async (req, res, next) => {
 
           handleUpdatePostData(req.body);
         } else {
-          let filename = post.photo;
-          post.photo = "";
-          fileRemover(filename);
+          console.log("Hi there");
           handleUpdatePostData(req.body);
         }
       }

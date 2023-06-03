@@ -1,6 +1,7 @@
 import axios from "axios";
 import BASEURL from "../../data/Baseurl";
 
+
 export const signup = async ({ name, email, password }) => {
   try {
     const { data } = await axios.post(`${BASEURL}/api/users/register`, {
@@ -15,6 +16,8 @@ export const signup = async ({ name, email, password }) => {
     throw new Error(error.message);
   }
 };
+
+
 
 export const login = async ({ email, password }) => {
   try {
