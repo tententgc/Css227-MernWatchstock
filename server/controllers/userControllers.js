@@ -1,5 +1,6 @@
 import { uploadPicture } from "../middleware/uploadPictureMiddleware";
 import User from "../models/User";
+import Post from "../models/Post";
 import { fileRemover } from "../utils/fileRemover";
 
 const registerUser = async (req, res, next) => {
@@ -88,7 +89,6 @@ const userProfile = async (req, res, next) => {
     next(error);
   }
 };
-
 
 const updateProfile = async (req, res, next) => {
   try {
@@ -180,10 +180,97 @@ const updateProfilePicture = async (req, res, next) => {
   }
 };
 
+export const addPostToUser = async (req, res) => {
+  try {
+    // 1. Get the post ID and slug from the request
+    const { postId, slug } = req.body;
+    console.log("Post ID: ", postId, "Slug: ", slug )
+    // 2. Check if the post exists
+    const post = await Post.findById(postId);
+    if (!post) {
+      return res.status(404).json({ error: 'Post not found' });
+    }
+
+    // 3. Add the post to the user's array of posts
+    const user = await User.findById(req.user._id);
+    user.posts.push({ _id: postId, slug });
+    await user.save();
+
+    // 4. Return success response
+    res.json({ message: 'Post added successfully', post });
+  } catch (error) {
+    // handle error
+    res.status(500).json({ error: 'An error occurred while adding post' });
+  }
+};
+
+// userControllers.js
+
+export const deletePostFromUser = async (req, res) => {
+  console.log("Param ID: ", req.params.id, typeof req.params.id);
+
+  try {
+    const user = await User.findById(req.user._id)
+    console.log("User posts: ", user.posts);
+
+    if (user) {
+      // Find the index of the post in the user's posts array
+      const removeIndex = user.posts.findIndex((item) => item.toString() === req.params.id);
+
+      // Check if post was found in user's posts array
+      if (removeIndex !== -1) {
+        // Splice the array to remove the post
+        user.posts.splice(removeIndex, 1);
+      } else {
+        res.status(404);
+        throw new Error('Post not found in user\'s post list');
+      }
+
+      await user.save()
+
+      res.json(user);
+    } else {
+      res.status(404);
+      throw new Error('User not found');
+    }
+
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send('Server Error');
+  }
+};
+
+export const getUserPosts = async (req, res) => { 
+  try {
+    const userId = req.params.userId; // Assuming you have the userId available in the request params
+
+    // Find the user by userId and populate the 'posts' field to get the associated posts
+    const user = await User.findById(userId).populate('posts');
+
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    const posts = user.posts;
+
+    // Return the posts as a response
+    return res.json({ posts });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: 'Internal server error' });
+  }
+}
+
+
+
 export {
   registerUser,
   loginUser,
   userProfile,
   updateProfile,
   updateProfilePicture,
+  addPostToUser,
+  deletePostFromUser,
+  getUserPosts
 };
+

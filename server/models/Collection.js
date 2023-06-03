@@ -53,7 +53,7 @@ const schemaCollection = new Schema(
         tags: {
             type: [String]
         },
-        
+
         categories: [
             String
         ],

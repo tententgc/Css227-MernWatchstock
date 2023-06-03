@@ -7,6 +7,7 @@ import { v4 as uuidv4 } from "uuid";
 
 const createRequest = async (req, res, next) => {
     try {
+        console.log(req.body); 
         const upload = uploadPicture.single('postPicture');
         upload(req, res, async function (err) {
             if (err) {

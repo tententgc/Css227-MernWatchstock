@@ -13,14 +13,22 @@ const UserSchema = new Schema(
     verified: { type: Boolean, default: false },
     verificationCode: { type: String, required: false },
     admin: { type: Boolean, default: false },
-
+    posts: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Post",
+        slug: { type: String, required: true },
+      },
+    ],
   },
   { timestamps: true }
 );
 
 UserSchema.pre("save", async function (next) {
   if (this.isModified("name")) {
-    const nameSlugs = this.name.split(" ").map((name) => slugify(name, { lower: true }));
+    const nameSlugs = this.name.split(" ").map((name) =>
+      slugify(name, { lower: true })
+    );
     this.slugs = nameSlugs;
   }
 

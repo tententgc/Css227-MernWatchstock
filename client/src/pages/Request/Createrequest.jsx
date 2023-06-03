@@ -2,7 +2,9 @@ import React, { useState } from "react";
 import axios from "axios";
 import MainLayout from "../../components/MainLayout";
 import { v4 as uuidv4 } from "uuid";
-
+import BASEURL from "../../data/Baseurl";
+import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 const CreateCollection = () => {
   const [title, setTitle] = useState("");
   const [brand, setBrand] = useState("");
@@ -16,6 +18,7 @@ const CreateCollection = () => {
   const [image, setImage] = useState("");
   const [tags, setTags] = useState([]);
   const [slug, setSlug] = useState(uuidv4());
+  const navigate = useNavigate(); 
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -43,7 +46,7 @@ const CreateCollection = () => {
         : {};
       console.log(account);
 
-      await axios.post("http://localhost:3001/api/requests", formData, config);
+      await axios.post(`${BASEURL}/api/requests`, formData, config);
       setTitle("");
       setBrand("");
       setSeries("");
@@ -56,7 +59,9 @@ const CreateCollection = () => {
       setImage("");
       setTags([]);
       setSlug(uuidv4());
+      navigate("/request"); 
     } catch (err) {
+      toast.error(err.response.data.message); 
       console.error(err);
     }
   };
