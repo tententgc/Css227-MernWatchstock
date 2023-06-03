@@ -82,11 +82,11 @@ const ListPage = () => {
   };
 
   return (
-    <MainLayout>
-      <Box sx={{ flexGrow: 1, p: 2 }}>
+   <MainLayout>
+      <Box sx={{ flexGrow: 1, p: 2, backgroundColor: '#fff', fontFamily: 'Georgia, serif' }}>
         <Grid container spacing={2}>
           <Grid item xs={12}>
-            <Typography variant="h4" component="div" gutterBottom>
+            <Typography variant="h4" component="div" gutterBottom style={{ color: '#ea580c', fontWeight: 'bold' }}>
               My Collection
             </Typography>
           </Grid>
@@ -98,13 +98,13 @@ const ListPage = () => {
               >
                 <TableHead>
                   <TableRow>
-                    <TableCell>Name</TableCell>
-                    <TableCell align="right">Action</TableCell>
+                    <TableCell style={{ color: '#ea580c', fontWeight: 'bold'}}>Name</TableCell>
+                    <TableCell align="right" style={{ color: '#ea580c', fontWeight: 'bold'}}>Action</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
                   {posts.map((post) => (
-                    <TableRow key={post._id}>
+                    <TableRow key={post._id} sx={{ '&:nth-of-type(odd)': { backgroundColor: 'rgba(234, 88, 12, 0.1)' } }}>
                       <TableCell component="th" scope="row">
                         <Grid container alignItems="center" spacing={2}>
                           <Grid item>
@@ -161,14 +161,14 @@ const ListPage = () => {
               transform: "translate(-50%, -50%)",
               width: isMobile ? "90%" : 400, // Responsive width
               bgcolor: "background.paper",
-              border: "2px solid #000",
+              border: "2px solid #ea580c",
               boxShadow: 24,
               p: 4,
             }}
           >
             {modalData && ( // Ensure modalData is not null before rendering these components
               <>
-                <Typography id="modal-modal-title" variant="h6" component="h2">
+                <Typography id="modal-modal-title" variant="h6" component="div" style={{ color: '#ea580c', fontWeight: 'bold' }}>
                   {modalData.title}
                 </Typography>
                 <Typography id="modal-modal-description" sx={{ mt: 2 }}>
@@ -178,8 +178,7 @@ const ListPage = () => {
                   <strong>Produced:</strong> {modalData.produced} <br />
                   <strong>Color:</strong> {modalData.color} <br />
                   <strong>Price:</strong> {modalData.price} <br />
-                  <strong>Details:</strong> {JSON.stringify(modalData.detail)}{" "}
-                  <br />
+                  <strong>Details:</strong> {JSON.stringify(modalData.detail)} <br />
                   <strong>Status:</strong> {modalData.status} <br />
                   <strong>Tags:</strong> {modalData.tags.join(", ")} <br />
                   <strong>Categories:</strong> {modalData.categories.join(", ")}
@@ -193,13 +192,16 @@ const ListPage = () => {
               }}
               color="secondary"
               variant="contained"
+              style={{ backgroundColor: '#ea580c', color: '#fff', fontWeight: 'bold', marginTop: '20px' }}
             >
               Close
             </Button>
           </Box>
         </Modal>
       </Box>
-    </MainLayout>
+</MainLayout>
+
+
   );
 };
 

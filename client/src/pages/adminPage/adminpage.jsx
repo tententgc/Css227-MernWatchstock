@@ -25,6 +25,7 @@ import SaveIcon from "@mui/icons-material/Save";
 import CloseIcon from "@mui/icons-material/Close";
 
 
+
 const ListPage = () => {
   const [posts, setPosts] = useState([]);
   const [showEditModal, setShowEditModal] = useState(false);
@@ -146,7 +147,6 @@ const handleUpdatePost = async () => {
             </Button>
           </div>
         </div>
-
         <TableContainer component={Paper}>
           <Table aria-label="simple table">
             <TableHead>
@@ -201,9 +201,15 @@ const handleUpdatePost = async () => {
             onClose={() => setShowEditModal(false)}
             aria-labelledby="modal-modal-title"
             aria-describedby="modal-modal-description"
+            style={{ backgroundColor: "white" , overflow: "auto"}}
           >
-            <Box sx={{ p: 4 }}>
-              <Typography id="modal-modal-title" variant="h6" component="h2">
+            <Box sx={{ p: 4, backgroundColor: "#f8f9fa" , maxHeight: '100vh', overflowY: 'auto' }}>
+              <Typography
+                id="modal-modal-title"
+                variant="h4"
+                component="h2"
+                style={{ color: "#ea580c", fontWeight: "bold" }}
+              >
                 Edit Post
               </Typography>
 
@@ -241,7 +247,7 @@ const handleUpdatePost = async () => {
                         name={name}
                         value={selectedPost[name]}
                         onChange={handleInputChange}
-                        className="appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
+                        className="appearance-none block w-full bg-gray-100 text-gray-700 border rounded-lg py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:ring-2 focus:ring-ea580c"
                       />
                     </div>
                   ))}
@@ -259,14 +265,15 @@ const handleUpdatePost = async () => {
                     name="postPicture"
                     accept="image/*"
                     onChange={handleFileChange}
-                    className="mt-1 block border-gray-300 rounded-md shadow-sm sm:text-sm"
+                    className="mt-1 block border-gray-300 rounded-md shadow-sm sm:text-sm focus:outline-none focus:ring-2 focus:ring-ea580c"
                   />
-                </div>{" "}
+                </div>
                 <Box sx={{ mt: 2 }}>
                   <Button
                     type="submit"
                     color="primary"
                     variant="contained"
+                    style={{ backgroundColor: "#ea580c", color: "white" }}
                     startIcon={<SaveIcon />}
                   >
                     Update
@@ -274,7 +281,8 @@ const handleUpdatePost = async () => {
                   <Button
                     onClick={() => setShowEditModal(false)}
                     color="secondary"
-                    variant="contained"
+                    variant="outlined"
+                    style={{ color: "#ea580c", borderColor: "#ea580c" }}
                     startIcon={<CloseIcon />}
                   >
                     Close
@@ -284,6 +292,7 @@ const handleUpdatePost = async () => {
             </Box>
           </Modal>
         )}
+
       </div>
     </MainLayout>
   );

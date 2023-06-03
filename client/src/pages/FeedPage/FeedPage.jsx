@@ -11,6 +11,7 @@ import MainLayout from "../../components/MainLayout";
 
 const Articles = () => {
   const [searchQuery, setSearchQuery] = useState("");
+  const [sortOrder, setSortOrder] = useState("");
 
   const { data, isLoading, isError } = useQuery({
     queryFn: () => getAllPosts(),
@@ -21,9 +22,27 @@ const Articles = () => {
     },
   });
 
-  const filteredData = data?.filter((post) =>
-    post.title.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  
+  const sortPosts = (a, b) => {
+    switch (sortOrder) {
+      case "name-asc":
+        return a.title.localeCompare(b.title);
+      case "name-desc":
+        return b.title.localeCompare(a.title);
+      case "date-asc":
+        return new Date(a.timestamp) - new Date(b.timestamp);
+      case "date-desc":
+        return new Date(b.timestamp) - new Date(a.timestamp);
+      default:
+        return 0;
+    }
+  };
+  
+ const filteredData = data
+   ?.filter((post) =>
+     post.title.toLowerCase().includes(searchQuery.toLowerCase())
+   )
+   .sort(sortPosts);
 
   return (
     <MainLayout>
@@ -42,6 +61,17 @@ const Articles = () => {
             onChange={(e) => setSearchQuery(e.target.value)}
             className="border border-gray-300 px-4 py-2 rounded-lg shadow-lg w-full md:w-1/2"
           />
+          <select
+            value={sortOrder}
+            onChange={(e) => setSortOrder(e.target.value)}
+            className="border border-gray-300 px-4 py-2 rounded-lg shadow-lg ml-4"
+          >
+            <option value="">Sort by...</option>
+            <option value="name-asc">Name A-Z</option>
+            <option value="name-desc">Name Z-A</option>
+            <option value="date-asc">Date First-Last</option>
+            <option value="date-desc">Date Last-First</option>
+          </select>
         </div>
 
         <div className="flex flex-wrap justify-center gap-6 mt-10">
@@ -55,7 +85,7 @@ const Articles = () => {
           ) : isError ? (
             <ErrorMessage message="Couldn't fetch the posts data" />
           ) : filteredData.length === 0 ? (
-            <p className="text-center text-white">No articles found.</p>
+            <p className="text-center text-white">No Collectionfound.</p>
           ) : (
             filteredData.map((post) => (
               <ArticleCard
@@ -67,10 +97,7 @@ const Articles = () => {
           )}
         </div>
 
-        <button className="mx-auto flex items-center gap-x-2 font-bold text-primary-300 border-2 border-primary-300 px-6 py-3 rounded-lg mt-10">
-          <span>More Watch</span>
-          <FaArrowRight className="w-3 h-3" />
-        </button>
+    
       </section>
     </MainLayout>
   );
