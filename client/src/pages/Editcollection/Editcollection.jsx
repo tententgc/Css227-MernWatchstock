@@ -1,10 +1,29 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import MainLayout from "../../components/MainLayout";
 import BaseUrl from "../../data/Baseurl";
 import { images, stables } from "../../constants";
-import { Modal } from "bootstrap";
+
+import {
+  Box,
+  Grid,
+  Typography,
+  TableContainer,
+  Paper,
+  Table,
+  TableBody,
+  TableRow,
+  TableCell,
+  IconButton,
+  Modal,
+  TableHead,
+  Button,
+} from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import { useTheme } from "@mui/material/styles";
+import useMediaQuery from "@mui/material/useMediaQuery";
 
 const ListPage = () => {
   const [posts, setPosts] = useState([]);
@@ -12,7 +31,8 @@ const ListPage = () => {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalData, setModalData] = useState(null);
-
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -22,8 +42,11 @@ const ListPage = () => {
         const config = {
           headers: { Authorization: `Bearer ${token}` },
         };
-        const response = await axios.get(`${BaseUrl}/api/collections/user/${user_id}`, config);
-        setPosts(response.data);
+        const response = await axios.get(
+          `${BaseUrl}/api/users/getuserposts/${user_id}`,
+          config
+        );
+        setPosts(response.data.posts);
       } catch (error) {
         console.log(error);
       }
@@ -32,7 +55,7 @@ const ListPage = () => {
     fetchData();
   }, []);
 
-  const handleDelete = async (slug) => {
+  const handleDelete = async (postId) => {
     const confirmation = window.confirm(
       "Are you sure you want to delete this post?"
     );
@@ -44,10 +67,10 @@ const ListPage = () => {
       const account = localStorage.getItem("account");
       const token = JSON.parse(account).token;
 
-      await axios.delete(`${BaseUrl}/api/collections/${slug}`, {
+      await axios.delete(`${BaseUrl}/api/users/deletepost/${postId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      setPosts(posts.filter((post) => post.slug !== slug));
+      setPosts(posts.filter((post) => post._id !== postId));
     } catch (error) {
       console.log(error);
     }
@@ -59,138 +82,131 @@ const ListPage = () => {
   };
 
   return (
-    <MainLayout>
-      <div className="flex flex-col h-full">
-        <div className="p-4 flex-grow">
-          <div className="flex items-center justify-between mb-4">
-            <h1 className="text-2xl font-bold">My Collection </h1>
-          </div>
-          <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Name
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Action
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
-                {posts.map((post) => (
-                  <tr key={post._id}>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="flex items-center">
-                        <img
-                          className="w-20 h-20 mr-4 rounded"
-                          src={
-                            post.photo
-                              ? stables.UPLOAD_FOLDER_BASE_URL + post.photo
-                              : images.samplePostImage
-                          }
-                          alt="post"
-                        />
-                        <span>{post.title}</span>
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-right">
-                      <div className="flex justify-end space-x-2">
-                        <button
-                          onClick={() => handleDelete(post.slug)}
-                          className="px-3 py-2 text-white bg-red-500 rounded"
+   <MainLayout>
+      <Box sx={{ flexGrow: 1, p: 2, backgroundColor: '#fff', fontFamily: 'Georgia, serif' }}>
+        <Grid container spacing={2}>
+          <Grid item xs={12}>
+            <Typography variant="h4" component="div" gutterBottom style={{ color: '#ea580c', fontWeight: 'bold' }}>
+              My Collection
+            </Typography>
+          </Grid>
+          <Grid item xs={12}>
+            <TableContainer component={Paper}>
+              <Table
+                sx={{ minWidth: isMobile ? 300 : 650 }}
+                aria-label="simple table"
+              >
+                <TableHead>
+                  <TableRow>
+                    <TableCell style={{ color: '#ea580c', fontWeight: 'bold'}}>Name</TableCell>
+                    <TableCell align="right" style={{ color: '#ea580c', fontWeight: 'bold'}}>Action</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {posts.map((post) => (
+                    <TableRow key={post._id} sx={{ '&:nth-of-type(odd)': { backgroundColor: 'rgba(234, 88, 12, 0.1)' } }}>
+                      <TableCell component="th" scope="row">
+                        <Grid container alignItems="center" spacing={2}>
+                          <Grid item>
+                            <img
+                              className="w-20 h-20 mr-4 rounded"
+                              src={
+                                post.photo
+                                  ? stables.UPLOAD_FOLDER_BASE_URL + post.photo
+                                  : images.samplePostImage
+                              }
+                              alt="post"
+                            />
+                          </Grid>
+                          <Grid item>
+                            <span>{post.title}</span>
+                          </Grid>
+                        </Grid>
+                      </TableCell>
+                      <TableCell align="right">
+                        <IconButton
+                          onClick={() => handleDelete(post._id)}
+                          color="secondary"
                         >
-                          Delete
-                        </button>
-                        <button
+                          <DeleteIcon />
+                        </IconButton>
+                        <IconButton
                           onClick={() => handleOpenModal(post)}
-                          className="px-3 py-2 text-white bg-orange-600 rounded"
+                          color="primary"
                         >
-                          View
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-      {isModalOpen && modalData && (
-        <div
-          className="fixed z-10 inset-0 overflow-y-auto"
-          aria-labelledby="modal-title"
-          role="dialog"
-          aria-modal="true"
+                          <VisibilityIcon />
+                        </IconButton>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </Grid>
+        </Grid>
+        <Modal
+          open={isModalOpen}
+          onClose={() => {
+            setIsModalOpen(false);
+            setModalData(null); // Set modal data back to null when closing the modal
+          }}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
         >
-          <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-            <div
-              className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
-              aria-hidden="true"
-            ></div>
-
-            <span
-              className="hidden sm:inline-block sm:align-middle sm:h-screen"
-              aria-hidden="true"
+          <Box
+            sx={{
+              position: "absolute",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+              width: isMobile ? "90%" : 400, // Responsive width
+              bgcolor: "background.paper",
+              border: "2px solid #ea580c",
+              boxShadow: 24,
+              p: 4,
+            }}
+          >
+            {modalData && ( // Ensure modalData is not null before rendering these components
+              <>
+                <Typography id="modal-modal-title" variant="h6" component="div" style={{ color: '#ea580c', fontWeight: 'bold' }}>
+                  {modalData.title}
+                </Typography>
+                <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                  <strong>Brand:</strong> {modalData.brand} <br />
+                  <strong>Series:</strong> {modalData.series} <br />
+                  <strong>Model:</strong> {modalData.model} <br />
+                  <strong>Produced:</strong> {modalData.produced} <br />
+                  <strong>Color:</strong> {modalData.color} <br />
+                  <strong>Price:</strong> {modalData.price} <br />
+                  <strong>Details:</strong> {JSON.stringify(modalData.detail)} <br />
+                  <strong>Status:</strong> {modalData.status} <br />
+                  <strong>Tags:</strong> {modalData.tags.join(", ")} <br />
+                  <strong>Categories:</strong> {modalData.categories.join(", ")}
+                </Typography>
+              </>
+            )}
+            <Button
+              onClick={() => {
+                setIsModalOpen(false);
+                setModalData(null); // Set modal data back to null when closing the modal
+              }}
+              color="secondary"
+              variant="contained"
+              style={{ backgroundColor: '#ea580c', color: '#fff', fontWeight: 'bold', marginTop: '20px' }}
             >
-              &#8203;
-            </span>
+              Close
+            </Button>
+          </Box>
+        </Modal>
+      </Box>
+</MainLayout>
 
-            <div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-              <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                <div className="sm:flex sm:items-start">
-                  <img
-                    className="w-48 h-48 rounded mr-4"
-                    src={
-                      modalData.photo
-                        ? stables.UPLOAD_FOLDER_BASE_URL + modalData.photo
-                        : images.samplePostImage
-                    }
-                    alt="post"
-                  />
-                  <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
-                    <h3
-                      className="text-lg leading-6 font-medium text-gray-900"
-                      id="modal-title"
-                    >
-                      {modalData.title}
-                    </h3>
-                    <div className="mt-2">
-                      <p className="text-sm text-gray-500">
-                        <strong>Brand:</strong> {modalData.brand} <br />
-                        <strong>Series:</strong> {modalData.series} <br />
-                        <strong>Model:</strong> {modalData.model} <br />
-                        <strong>Produced:</strong> {modalData.produced} <br />
-                        <strong>Color:</strong> {modalData.color} <br />
-                        <strong>Price:</strong> {modalData.price} <br />
-                        <strong>Details:</strong>{" "}
-                        {JSON.stringify(modalData.detail)} <br />
-                        <strong>Status:</strong> {modalData.status} <br />
-                        <strong>Tags:</strong> {modalData.tags.join(", ")}{" "}
-                        <br />
-                        <strong>Categories:</strong>{" "}
-                        {modalData.categories.join(", ")}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-                <button
-                  type="button"
-                  className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-orange-600 text-base font-medium text-white hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 sm:ml-3 sm:w-auto sm:text-sm"
-                  onClick={() => setIsModalOpen(false)}
-                >
-                  Close
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-    </MainLayout>
+
   );
 };
 
 export default ListPage;
+
+
+
+

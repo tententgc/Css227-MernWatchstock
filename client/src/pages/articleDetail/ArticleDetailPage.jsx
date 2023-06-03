@@ -45,11 +45,6 @@ const ArticleDetailPage = () => {
     },
   });
 
-  const { data: postsData } = useQuery({
-    queryFn: () => getAllPosts(),
-    queryKey: ["posts"],
-  });
-
 const handleAddToCollection = async () => {
   const payload = {
     title: data?.title,
@@ -63,29 +58,36 @@ const handleAddToCollection = async () => {
     color: data?.color,
     price: data?.price,
     detail: data?.detail,
-
-
+    slug: data?.slug, 
+    postId: data?._id, 
   };
 
   try {
     const account = localStorage.getItem("account");
     const token = JSON.parse(account).token;
 
-    const response = await axios.post(`${BaseUrl}/api/collections`, payload, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
+    // Use axios to send a PUT request to the /api/users/addpost endpoint, including the post id in the request
+    const response = await axios.post(
+      `${BaseUrl}/api/users/addpost`,
+      payload,
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
 
     if (response.status === 200) {
-      console.log("Article added to collection successfully");
-       // Use navigate to redirect to the success page
+      alert(" added to collection successfully");
+      console.log(" added to collection successfully");
+      // Use navigate to redirect to the success page
     } else {
-      console.error("Failed to add article to collection");
+      alert("Failed to add  to collection");
+      console.error("Failed to add to collection");
     }
   } catch (error) {
+    alert("Error occurred while adding article to collection");
     console.error("Error occurred while adding article to collection:", error);
   }
 };
-
 
 
   return (
