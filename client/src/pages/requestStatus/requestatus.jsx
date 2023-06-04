@@ -24,13 +24,17 @@ import CancelIcon from "@mui/icons-material/Cancel";
 import DeleteIcon from "@mui/icons-material/Delete";
 import CloseIcon from "@mui/icons-material/Close";
 import VisibilityIcon from "@mui/icons-material/Visibility";
+import { useTheme } from "@mui/material/styles";
+import useMediaQuery from "@mui/material/useMediaQuery";
+
 const ListPage = () => {
   const [posts, setPosts] = useState([]);
   const navigate = useNavigate();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalData, setModalData] = useState(null);
-
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   useEffect(() => {
     const fetchData = async () => {
@@ -41,10 +45,7 @@ const ListPage = () => {
         const config = {
           headers: { Authorization: `Bearer ${token}` },
         };
-        const response = await axios.get(
-          `${BaseUrl}/api/requests`,
-          config
-        );
+        const response = await axios.get(`${BaseUrl}/api/requests`, config);
         setPosts(response.data);
       } catch (error) {
         console.log(error);
@@ -75,50 +76,51 @@ const ListPage = () => {
     }
   };
 
-    const handleOpenModal = (post) => {
-      setModalData(post);
-      setIsModalOpen(true);
-    
-    };
+  const handleOpenModal = (post) => {
+    setModalData(post);
+    setIsModalOpen(true);
+  };
 
+  const handleStatusChange = async (slug, status, post) => {
+    try {
+      const account = localStorage.getItem("account");
+      const token = JSON.parse(account).token;
 
-   const handleStatusChange = async (slug, status,post) => {
-     try {
-       const account = localStorage.getItem("account");
-       const token = JSON.parse(account).token;
+      const config = {
+        headers: { Authorization: `Bearer ${token}` },
+      };
+      //    console.log("photo",post.photo)
+      await axios.patch(
+        `${BaseUrl}/api/requests/status/${slug}`,
+        { status },
+        config
+      );
+      if (status === "approved") {
+        const postPayload = {
+          title: post.title,
+          brand: post.brand,
+          series: post.series,
+          model: post.model,
+          produced: post.produced,
+          color: post.color,
+          price: post.price,
+          details: post.detail,
+          photo: post.photo,
+          status: post.status,
+          tags: post.tags,
+          categories: post.categories,
+        };
 
-       const config = {
-         headers: { Authorization: `Bearer ${token}` },
-       };
-    //    console.log("photo",post.photo)
-       await axios.patch(`${BaseUrl}/api/requests/status/${slug}`, { status }, config);
-       if (status === "approved") {
-        
-         const postPayload = {
-           title: post.title,
-           brand: post.brand,
-           series: post.series,
-           model: post.model,
-           produced: post.produced,
-           color: post.color,
-           price: post.price,
-           details: post.detail,
-           photo: post.photo, 
-           status: post.status,
-           tags: post.tags,
-           categories: post.categories,
-         };
+        await axios.post(`${BaseUrl}/api/posts`, postPayload, config);
+      }
 
-         await axios.post(`${BaseUrl}/api/posts`, postPayload, config);
-       }
-
-       setPosts(
-         posts.map((post) => (post.slug === slug ? { ...post, status } : post))
-       );
-     } catch (error) {
-       console.log(error);
-     }
-   };
+      setPosts(
+        posts.map((post) => (post.slug === slug ? { ...post, status } : post))
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <MainLayout>
       <div className="p-4 h-full min-h-screen">
@@ -214,44 +216,100 @@ const ListPage = () => {
         {isModalOpen && modalData && (
           <Modal
             open={isModalOpen}
-            onClose={() => setIsModalOpen(false)}
+            onClose={() => {
+              setIsModalOpen(false);
+              setModalData(null);
+            }}
             aria-labelledby="modal-modal-title"
             aria-describedby="modal-modal-description"
           >
-            <Box sx={{ p: 4 }}>
-              <Typography id="modal-modal-title" variant="h6" component="h2">
-                {modalData.title}
-              </Typography>
-              <Typography variant="body1" component="p">
-                <strong>Brand:</strong> {modalData.brand} <br />
-                <strong>Series:</strong> {modalData.series} <br />
-                <strong>Model:</strong> {modalData.model} <br />
-                <strong>Produced:</strong> {modalData.produced} <br />
-                <strong>Color:</strong> {modalData.color} <br />
-                <strong>Price:</strong> {modalData.price} <br />
-                <strong>Details:</strong> {JSON.stringify(modalData.detail)}{" "}
-                <br />
-                <strong>Status:</strong> {modalData.status} <br />
-                <strong>Tags:</strong> {modalData.tags.join(", ")} <br />
-                <strong>Categories:</strong> {modalData.categories.join(", ")}
-              </Typography>
-              <Box sx={{ mt: 2 }}>
-                <Button
-                  onClick={() => setIsModalOpen(false)}
-                  color="secondary"
-                  variant="contained"
-                  startIcon={<CloseIcon />}
-                >
-                  Close
-                </Button>
-              </Box>
+            <Box
+              sx={{
+                position: "absolute",
+                top: "50%",
+                left: "50%",
+                transform: "translate(-50%, -50%)",
+                width: isMobile ? "90%" : 800,
+                bgcolor: "background.paper",
+                border: "2px solid #ea580c",
+                boxShadow: 24,
+                p: 4,
+                display: "flex", // Add display flex
+                flexDirection: "row", // Make it horizontal flex container
+                justifyContent: "space-between",
+              }}
+            >
+              {modalData && (
+                <>
+                  <div
+                    style={{
+                      width: isMobile ? "100%" : "40%",
+                      marginRight: isMobile ? "0px" : "20px",
+                    }}
+                  >
+                    {modalData.photo && (
+                      <img
+                        src={
+                          modalData?.photo
+                            ? stables.UPLOAD_FOLDER_BASE_URL + modalData?.photo
+                            : images.samplePostImage
+                        }
+                        alt={modalData.title}
+                        style={{
+                          width: "100%",
+                          objectFit: "cover",
+                          marginTop: "10px",
+                        }}
+                      />
+                    )}
+                  </div>
+                  <div style={{ width: isMobile ? "100%" : "60%" }}>
+                    <Typography
+                      id="modal-modal-title"
+                      variant="h6"
+                      component="div"
+                      style={{ color: "#ea580c", fontWeight: "bold" }}
+                    >
+                      {modalData.title}
+                    </Typography>
+                    <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                      <strong>Brand:</strong> {modalData.brand} <br />
+                      <strong>Series:</strong> {modalData.series} <br />
+                      <strong>Model:</strong> {modalData.model} <br />
+                      <strong>Produced:</strong> {modalData.produced} <br />
+                      <strong>Color:</strong> {modalData.color} <br />
+                      <strong>Price:</strong> {modalData.price} <br />
+                      <strong>Details:</strong>{" "}
+                      {JSON.stringify(modalData.detail)} <br />
+                      <strong>Status:</strong> {modalData.status} <br />
+                      <strong>Tags:</strong> {modalData.tags.join(", ")} <br />
+                    
+                    </Typography>
+                    <Button
+                      onClick={() => {
+                        setIsModalOpen(false);
+                        setModalData(null);
+                      }}
+                      color="secondary"
+                      variant="contained"
+                      style={{
+                        backgroundColor: "#ea580c",
+                        color: "#fff",
+                        fontWeight: "bold",
+                        marginTop: "20px",
+                      }}
+                    >
+                      Close
+                    </Button>
+                  </div>
+                </>
+              )}
             </Box>
           </Modal>
         )}
       </div>
     </MainLayout>
   );
-
 };
 
 export default ListPage;

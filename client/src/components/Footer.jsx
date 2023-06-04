@@ -1,4 +1,5 @@
 import React from "react";
+import Contact from '../pages/contact/contact';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -10,20 +11,20 @@ const Footer = () => {
         <a href="/" className="text-orange-600 hover:text-orange-500">
           Home
         </a>
-        <a href="/about" className="text-orange-600 hover:text-orange-500">
-          About Us
+        <a href="/feed" className="text-orange-600 hover:text-orange-500">
+          All Collection 
+        </a>
+        <a href="/request" className="text-orange-600 hover:text-orange-500">
+          Request
         </a>
         <a href="/contact" className="text-orange-600 hover:text-orange-500">
           Contact
         </a>
-        <a href="/services" className="text-orange-600 hover:text-orange-500">
-          Services
-        </a>
         <a
-          href="/privacy-policy"
+          href="www.tententgc.com"
           className="text-orange-600 hover:text-orange-500"
         >
-          Privacy Policy
+          About me
         </a>
       </div>
       <p>{currentYear} © All rights reserved by tententgc</p>
