@@ -18,6 +18,9 @@ import {
   IconButton,
   Modal,
   Button,
+  TextField,
+  Select,
+  MenuItem,
 } from "@mui/material";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import CancelIcon from "@mui/icons-material/Cancel";
@@ -31,12 +34,15 @@ import { toast } from "react-hot-toast";
 const ListPage = () => {
   const [posts, setPosts] = useState([]);
   const navigate = useNavigate();
-
-  
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalData, setModalData] = useState(null);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const [searchTerm, setSearchTerm] = useState("");
+  const [statusFilter, setStatusFilter] = useState("");
+  const [sortedPosts, setSortedPosts] = useState([]);
+  const [sortType, setSortType] = useState("");
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -49,6 +55,7 @@ const ListPage = () => {
         };
         const response = await axios.get(`${BaseUrl}/api/requests`, config);
         setPosts(response.data);
+        setSortedPosts(response.data);
       } catch (error) {
         console.log(error);
       }
@@ -56,6 +63,56 @@ const ListPage = () => {
 
     fetchData();
   }, []);
+
+  useEffect(() => {
+    let filteredPosts = posts;
+    if (searchTerm) {
+      filteredPosts = filteredPosts.filter((post) =>
+        post.title.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
+
+    if (statusFilter) {
+      filteredPosts = filteredPosts.filter(
+        (post) => post.status === statusFilter
+      );
+    }
+
+    setSortedPosts(filteredPosts);
+  }, [searchTerm, statusFilter, posts]);
+
+ useEffect(() => {
+   switch (sortType) {
+     case "AZ":
+       setSortedPosts(
+         [...posts].sort((a, b) => a.title.localeCompare(b.title))
+       );
+       break;
+     case "ZA":
+       setSortedPosts(
+         [...posts].sort((a, b) => b.title.localeCompare(a.title))
+       );
+       break;
+     case "newest":
+       setSortedPosts(
+         [...posts].sort(
+           (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+         )
+       );
+       break;
+     case "oldest":
+       setSortedPosts(
+         [...posts].sort(
+           (a, b) => new Date(a.createdAt) - new Date(b.createdAt)
+         )
+       );
+       break;
+     default:
+       setSortedPosts(posts);
+       break;
+   }
+ }, [sortType, posts]);
+
 
   const handleDelete = async (slug) => {
     const confirmation = window.confirm(
@@ -125,38 +182,80 @@ const ListPage = () => {
     }
   };
   return (
-    <MainLayout>
-      <div className="p-4 h-full min-h-screen">
-        <div className="mb-4 flex flex-col sm:flex-row justify-between items-center">
-          <Typography
-            variant="h4"
-            component="div"
-            gutterBottom
-            style={{ color: "#ea580c", fontWeight: "bold" }}
-          >
-            All User Request Status
-          </Typography>
-          <div className="space-y-4 sm:space-y-0 sm:space-x-4 flex flex-wrap">
-            <Button
-              variant="contained"
-              href="/createrequest"
-              sx={{
-                color: "#fff",
-                borderColor: "#f97316",
-                backgroundColor: "#f97316",
-                rounded: true,
-                "&:hover": {
-                  backgroundColor: "#fff",
-                  color: "#f97316",
-                  borderColor: "#fff",
-                },
-              }}
+   <MainLayout>
+      <Box sx={{ flexGrow: 1, p: 2 }}>
+        <Grid container spacing={2}>
+          <Grid item xs={12}>
+            <div className="mb-4 flex flex-col sm:flex-row justify-between items-center">
+              <Typography
+                variant="h4"
+                component="div"
+                gutterBottom
+                style={{ color: "#ea580c", fontWeight: "bold" }}
+              >
+                All Yours Requests
+              </Typography>
+              <div className="space-y-4 sm:space-y-0 sm:space-x-4 flex flex-wrap">
+                <Button
+                  variant="contained"
+                  onClick={() => navigate("/createrequest")}
+                  sx={{
+                    color: "#fff",
+                    borderColor: "#f97316",
+                    backgroundColor: "#f97316",
+                    "&:hover": {
+                      backgroundColor: "#fff",
+                      color: "#f97316",
+                      borderColor: "#fff",
+                    },
+                  }}
+                >
+                  Create New Request
+                </Button>
+              </div>
+            </div>
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <TextField
+              variant="outlined"
+              label="Search"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              fullWidth
+            />
+          </Grid>
+          <Grid item xs={12} sm={6} md={3}>
+            <Select
+              variant="outlined"
+              value={statusFilter}
+              onChange={(e) => setStatusFilter(e.target.value)}
+              fullWidth
             >
-              {" "}
-              Create Request
-            </Button>
-          </div>
-        </div>
+              <MenuItem value="">Filter by Status</MenuItem>
+              <MenuItem value="approved">Approved</MenuItem>
+              <MenuItem value="rejected">Rejected</MenuItem>
+              <MenuItem value="pending">Pending</MenuItem>
+            </Select>
+          </Grid>
+          <Grid item xs={12} sm={6} md={3}>
+            <Select
+              variant="outlined"
+              value={sortType}
+              onChange={(e) => setSortType(e.target.value)}
+              fullWidth
+            >
+              <MenuItem value="">Sort By</MenuItem>
+              <MenuItem value="AZ">A-Z</MenuItem>
+              <MenuItem value="ZA">Z-A</MenuItem>
+              <MenuItem value="newest">Newest</MenuItem>
+              <MenuItem value="oldest">Oldest</MenuItem>
+            </Select>
+          </Grid>
+  
+  
+</Grid>
+
+
         <TableContainer component={Paper}>
           <Table aria-label="simple table">
             <TableHead>
@@ -167,7 +266,7 @@ const ListPage = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {posts.map((post) => (
+              {sortedPosts.map((post) => (
                 <TableRow key={post._id}>
                   <TableCell component="th" scope="row">
                     <Grid container alignItems="center" spacing={2}>
@@ -326,7 +425,8 @@ const ListPage = () => {
             </Box>
           </Modal>
         )}
-      </div>
+      </Box>
+      
     </MainLayout>
   );
 };

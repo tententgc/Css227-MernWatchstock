@@ -19,6 +19,9 @@ import {
   Modal,
   TableHead,
   Button,
+  TextField,
+  MenuItem,
+  Select,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import VisibilityIcon from "@mui/icons-material/Visibility";
@@ -28,6 +31,8 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 const ListPage = () => {
   const [posts, setPosts] = useState([]);
   const navigate = useNavigate();
+  const [searchTerm, setSearchTerm] = useState("");
+  const [sortOption, setSortOption] = useState("default");
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalData, setModalData] = useState(null);
@@ -54,6 +59,34 @@ const ListPage = () => {
 
     fetchData();
   }, []);
+
+ const filteredPosts = posts.filter((post) =>
+   post.title.toLowerCase().includes(searchTerm.toLowerCase())
+ );
+
+ let sortedPosts = [...filteredPosts];
+
+ switch (sortOption) {
+   case "titleAZ":
+     sortedPosts.sort((a, b) => a.title.localeCompare(b.title));
+     break;
+   case "titleZA":
+     sortedPosts.sort((a, b) => b.title.localeCompare(a.title));
+     break;
+   case "dateNewOld":
+     sortedPosts.sort(
+       (a, b) => new Date(b.created_at) - new Date(a.created_at)
+     );
+     break;
+   case "dateOldNew":
+     sortedPosts.sort(
+       (a, b) => new Date(a.created_at) - new Date(b.created_at)
+     );
+     break;
+   default:
+     break;
+ }
+
 
   const handleDelete = async (postId) => {
     const confirmation = window.confirm(
@@ -102,6 +135,30 @@ const ListPage = () => {
               My Collection
             </Typography>
           </Grid>
+          <Grid item xs={12} sm={6}>
+            <TextField
+              fullWidth
+              label="Search by Name"
+              variant="outlined"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <Select
+              fullWidth
+              value={sortOption}
+              onChange={(e) => setSortOption(e.target.value)}
+              variant="outlined"
+            >
+              <MenuItem value="default">Sort by...</MenuItem>
+              <MenuItem value="titleAZ">Title A-Z</MenuItem>
+              <MenuItem value="titleZA">Title Z-A</MenuItem>
+              <MenuItem value="dateNewOld">Date New-Old</MenuItem>
+              <MenuItem value="dateOldNew">Date Old-New</MenuItem>
+            </Select>
+          </Grid>
+
           <Grid item xs={12}>
             <TableContainer component={Paper}>
               <Table
@@ -110,23 +167,13 @@ const ListPage = () => {
               >
                 <TableHead>
                   <TableRow>
-                    <TableCell>
-                      Name
-                    </TableCell>
-                    <TableCell
-                      align="right"
-                      
-                    >
-                      Action
-                    </TableCell>
+                    <TableCell>Name</TableCell>
+                    <TableCell align="right">Action</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {posts.map((post) => (
-                    <TableRow
-                      key={post._id}
-                      
-                    >
+                  {sortedPosts.map((post) => (
+                    <TableRow key={post._id}>
                       <TableCell component="th" scope="row">
                         <Grid container alignItems="center" spacing={2}>
                           <Grid item>
@@ -233,7 +280,6 @@ const ListPage = () => {
                     <strong>Price:</strong> {modalData.price} <br />
                     <strong>Details:</strong> {JSON.stringify(modalData.detail)}{" "}
                     <br />
-                    
                     <strong>Tags:</strong> {modalData.tags.join(", ")} <br />
                   </Typography>
                   <Button

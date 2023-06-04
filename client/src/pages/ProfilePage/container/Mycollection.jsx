@@ -62,7 +62,7 @@ const filteredData = posts.filter((post) =>
       <div className="flex justify-center mt-10">
         <input
           type="text"
-          placeholder="Search by title..."
+          placeholder="Search by Name..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           className="border border-gray-300 px-4 py-2 rounded-lg shadow-lg w-full md:w-1/2"
@@ -80,7 +80,7 @@ const filteredData = posts.filter((post) =>
         ) : isError ? (
           <ErrorMessage message="Couldn't fetch the posts data" />
         ) : filteredData.length === 0 ? (
-          <p className="text-center text-white">No articles found.</p>
+          <p className="text-center text-white">No Collection found.</p>
         ) : (
           filteredData.map((post) => (
             <ArticleCard

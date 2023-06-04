@@ -9,7 +9,8 @@ import {
   TextField,
   TextareaAutosize,
   Input,
-  Grid
+  Grid,
+  Typography,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom"; 
 const CreateCollection = () => {
@@ -78,83 +79,103 @@ const CreateCollection = () => {
         sx={{
           minHeight: "100vh",
           display: "flex",
+          flexDirection: "column",
           alignItems: "center",
           justifyContent: "center",
-          color: "#ea580c",
         }}
       >
+        <Typography variant="h4" component="h1" align="center" gutterBottom>
+          Create Collection
+        </Typography>
         <form onSubmit={handleSubmit}>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
               <TextField
                 type="text"
+                label="Name"
                 placeholder="Name"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 fullWidth
                 variant="outlined"
+                sx={{ marginBottom: 2 }}
               />
               <TextField
                 type="text"
+                label="Brand"
                 placeholder="Brand"
                 value={brand}
                 onChange={(e) => setBrand(e.target.value)}
                 fullWidth
                 variant="outlined"
+                sx={{ marginBottom: 2 }}
               />
               <TextField
                 type="number"
+                label="Price"
                 placeholder="Price"
                 value={price}
                 onChange={(e) => setPrice(e.target.value)}
                 fullWidth
                 variant="outlined"
+                sx={{ marginBottom: 2 }}
               />
               <TextField
                 type="text"
+                label="Tags"
                 placeholder="Tags"
                 value={tags}
                 onChange={(e) => setTags(e.target.value)}
                 fullWidth
                 variant="outlined"
+                sx={{ marginBottom: 2 }}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
                 type="text"
+                label="Series"
                 placeholder="Series"
                 value={series}
                 onChange={(e) => setSeries(e.target.value)}
                 fullWidth
                 variant="outlined"
+                sx={{ marginBottom: 2 }}
               />
               <TextField
                 type="text"
+                label="Model"
                 placeholder="Model"
                 value={model}
                 onChange={(e) => setModel(e.target.value)}
                 fullWidth
                 variant="outlined"
+                sx={{ marginBottom: 2 }}
               />
               <TextField
                 type="text"
+                label="Produced"
                 placeholder="Produced"
                 value={produced}
                 onChange={(e) => setProduced(e.target.value)}
                 fullWidth
                 variant="outlined"
+                sx={{ marginBottom: 2 }}
               />
               <TextField
                 type="text"
+                label="Color"
                 placeholder="Color"
                 value={color}
                 onChange={(e) => setColor(e.target.value)}
                 fullWidth
                 variant="outlined"
+                sx={{ marginBottom: 2 }}
               />
             </Grid>
             <Grid item xs={12}>
               <TextField
+                label="Detail"
                 placeholder="Detail"
                 value={detail}
                 onChange={(e) => setDetail(e.target.value)}
@@ -162,11 +183,14 @@ const CreateCollection = () => {
                 variant="outlined"
                 multiline
                 rows={4}
+                sx={{ marginBottom: 2 }}
               />
               <Input
                 type="file"
                 onChange={(e) => setImage(e.target.files[0])}
                 fullWidth
+                variant="outlined"
+                sx={{ mt: 2, marginBottom: 2 }}
               />
               <Button
                 type="submit"
