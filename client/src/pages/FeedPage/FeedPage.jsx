@@ -20,6 +20,7 @@ const Articles = () => {
       toast.error(error.message);
       console.log(error);
     },
+    refetchInterval: 5000,
   });
 
   
@@ -69,8 +70,6 @@ const Articles = () => {
             <option value="">Sort by...</option>
             <option value="name-asc">Name A-Z</option>
             <option value="name-desc">Name Z-A</option>
-            <option value="date-asc">Date First-Last</option>
-            <option value="date-desc">Date Last-First</option>
           </select>
         </div>
 
