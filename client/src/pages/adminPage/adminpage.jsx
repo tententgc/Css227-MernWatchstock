@@ -18,19 +18,30 @@ import {
   IconButton,
   Modal,
   Button,
+  TextField,
+  Select,
+  InputAdornment,
+  MenuItem
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import SaveIcon from "@mui/icons-material/Save";
 import CloseIcon from "@mui/icons-material/Close";
-
-
+import { useTheme } from "@mui/material/styles";
+import useMediaQuery from "@mui/material/useMediaQuery";
 
 const ListPage = () => {
   const [posts, setPosts] = useState([]);
+  const [filteredPosts, setFilteredPosts] = useState([]);
   const [showEditModal, setShowEditModal] = useState(false);
   const [selectedPost, setSelectedPost] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
   const navigate = useNavigate();
+  const [sortedPosts, setSortedPosts] = useState([]);
+  const [sortType, setSortType] = useState("");
+    const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -46,6 +57,49 @@ const ListPage = () => {
 
     fetchData();
   }, []);
+
+
+   useEffect(() => {
+     let filteredPosts = posts;
+     if (searchTerm) {
+       filteredPosts = filteredPosts.filter((post) =>
+         post.title.toLowerCase().includes(searchTerm.toLowerCase())
+       );
+     }
+     setSortedPosts(filteredPosts);
+   }, [searchTerm, posts]);
+
+ useEffect(() => {
+   switch (sortType) {
+     case "AZ":
+       setSortedPosts(
+         [...posts].sort((a, b) => a.title.localeCompare(b.title))
+       );
+       break;
+     case "ZA":
+       setSortedPosts(
+         [...posts].sort((a, b) => b.title.localeCompare(a.title))
+       );
+       break;
+     case "newest":
+       setSortedPosts(
+         [...posts].sort(
+           (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+         )
+       );
+       break;
+     case "oldest":
+       setSortedPosts(
+         [...posts].sort(
+           (a, b) => new Date(a.createdAt) - new Date(b.createdAt)
+         )
+       );
+       break;
+     default:
+       setSortedPosts(posts);
+       break;
+   }
+ }, [sortType, posts]);
 
   const handleEdit = (post) => {
     setSelectedPost(post);
@@ -133,20 +187,62 @@ const handleUpdatePost = async () => {
 
   return (
     <MainLayout>
-      <div className="p-4 h-full min-h-screen">
+      <Box sx={{ flexGrow: 1, p: 2 }}>
+        <Grid container spacing={2}>
+          <Grid item xs={12}>
         <div className="mb-4 flex flex-col sm:flex-row justify-between items-center">
-          <Typography variant="h4" component="div" gutterBottom>
+          <Typography
+            variant="h4"
+            component="div"
+            gutterBottom
+            style={{ color: "#ea580c", fontWeight: "bold" }}
+          >
             All Collection
           </Typography>
           <div className="space-y-4 sm:space-y-0 sm:space-x-4 flex flex-wrap">
-            <Button variant="contained" href="/createcollection">
+            <Button variant="contained"  onClick={() => navigate("/createcollection")}    sx={{
+                color: "#fff",
+                borderColor: "#f97316",
+                backgroundColor: "#f97316",
+                rounded: true,
+                "&:hover": {
+                  backgroundColor: "#fff",
+                  color: "#f97316",
+                  borderColor: "#fff",
+                },
+              }}>
               Create New Collection
             </Button>
-            <Button variant="contained" href="/requestadmin">
-              Request Status
-            </Button>
+      
           </div>
         </div>
+        </Grid>
+        <Grid item xs={12} sm={6}>
+            <TextField
+              variant="outlined"
+              label="Search"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              fullWidth
+            />
+          </Grid>
+         
+                 <Grid item xs={12} sm={6}>
+            <Select
+              variant="outlined"
+              value={sortType}
+              onChange={(e) => setSortType(e.target.value)}
+              fullWidth
+            >
+              <MenuItem value="">Sort By</MenuItem>
+              <MenuItem value="AZ">A-Z</MenuItem>
+              <MenuItem value="ZA">Z-A</MenuItem>
+              <MenuItem value="newest">Newest</MenuItem>
+              <MenuItem value="oldest">Oldest</MenuItem>
+            </Select>
+          </Grid>
+        </Grid>
+
         <TableContainer component={Paper}>
           <Table aria-label="simple table">
             <TableHead>
@@ -156,7 +252,7 @@ const handleUpdatePost = async () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {posts.map((post) => (
+              {sortedPosts.map((post) => (
                 <TableRow key={post._id}>
                   <TableCell component="th" scope="row">
                     <Grid container alignItems="center" spacing={2}>
@@ -201,9 +297,16 @@ const handleUpdatePost = async () => {
             onClose={() => setShowEditModal(false)}
             aria-labelledby="modal-modal-title"
             aria-describedby="modal-modal-description"
-            style={{ backgroundColor: "white" , overflow: "auto"}}
+            style={{ backgroundColor: "white", overflow: "auto" }}
           >
-            <Box sx={{ p: 4, backgroundColor: "#f8f9fa" , maxHeight: '100vh', overflowY: 'auto' }}>
+            <Box
+              sx={{
+                p: 4,
+                backgroundColor: "#f8f9fa",
+                maxHeight: "100vh",
+                overflowY: "auto",
+              }}
+            >
               <Typography
                 id="modal-modal-title"
                 variant="h4"
@@ -292,8 +395,7 @@ const handleUpdatePost = async () => {
             </Box>
           </Modal>
         )}
-
-      </div>
+      </Box>
     </MainLayout>
   );
 };

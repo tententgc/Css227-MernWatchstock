@@ -20,6 +20,7 @@ const Articles = () => {
       toast.error(error.message);
       console.log(error);
     },
+    refetchInterval: 5000,
   });
 
   
@@ -30,9 +31,9 @@ const Articles = () => {
       case "name-desc":
         return b.title.localeCompare(a.title);
       case "date-asc":
-        return new Date(a.timestamp) - new Date(b.timestamp);
+        return new Date(a.createdAt) - new Date(b.createdAt);
       case "date-desc":
-        return new Date(b.timestamp) - new Date(a.timestamp);
+        return new Date(b.createdAt) - new Date(a.createdAt);
       default:
         return 0;
     }
@@ -48,15 +49,15 @@ const Articles = () => {
     <MainLayout>
       <section className="flex flex-col container mx-auto px-5 py-10 bg-primary-300">
         <div className="flex flex-col items-center justify-center space-y-5 mt-5">
-          <h1 className="text-4xl font-bold text-center text-black">
-            All Collection
+          <h1 className="text-4xl font-bold text-center text-orange-600">
+            All Collections 
           </h1>
         </div>
 
         <div className="flex justify-center mt-10">
           <input
             type="text"
-            placeholder="Search by title..."
+            placeholder="Search by Name"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="border border-gray-300 px-4 py-2 rounded-lg shadow-lg w-full md:w-1/2"
@@ -66,7 +67,7 @@ const Articles = () => {
             onChange={(e) => setSortOrder(e.target.value)}
             className="border border-gray-300 px-4 py-2 rounded-lg shadow-lg ml-4"
           >
-            <option value="">Sort by...</option>
+            <option value="">Sort by </option>
             <option value="name-asc">Name A-Z</option>
             <option value="name-desc">Name Z-A</option>
             <option value="date-asc">Date First-Last</option>
@@ -96,8 +97,6 @@ const Articles = () => {
             ))
           )}
         </div>
-
-    
       </section>
     </MainLayout>
   );

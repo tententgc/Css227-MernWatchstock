@@ -3,6 +3,7 @@ import axios from "axios";
 import MainLayout from "../../components/MainLayout";
 import { images, stables } from "../../constants";
 
+
 import Mycollection from "./container/Mycollection";
 const ProfilePage = () => {
   const [profile, setProfile] = useState(null);
@@ -47,6 +48,8 @@ const ProfilePage = () => {
                     height: "150px",
                     borderRadius: "50%",
                     overflow: "hidden",
+                    border: "5px solid #f97316",
+                    boxShadow: "0px 0px 10px 5px #f97316",
                   }}
                 >
                   <img
@@ -61,7 +64,6 @@ const ProfilePage = () => {
                       width: "100%",
                       height: "100%",
                       borderRadius: "50%",
-                      borderBlockColor: "white", 
                     }}
                   />
                 </div>
@@ -81,6 +83,7 @@ const ProfilePage = () => {
           </div>
         </div>
       </div>
+                   
       <Mycollection />
     </MainLayout>
   );

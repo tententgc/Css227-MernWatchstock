@@ -30,12 +30,12 @@ const ArticleDetailPage = () => {
 
   const { data, isLoading, isError } = useQuery({
     queryFn: () => getSinglePost({ slug }),
-    queryKey: ["blog", slug],
+    queryKey: ["item", slug],
     onSuccess: (data) => {
       setbreadCrumbsData([
         { name: "Home", link: "/" },
         { name: "item", link: "/feed" },
-        { name: "Details collection", link: `/feed/${data.slug}` },
+        { name: "Details collection", link: `/item/${data.slug}` },
       ]);
       setBody(
         parse(
@@ -118,7 +118,7 @@ const handleAddToCollection = async () => {
               <div className="mt-4 flex gap-2">
                 {data?.categories.map((category) => (
                   <Link
-                    to={`/blog?category=${category.name}`}
+                    to={`/item?category=${category.name}`}
                     className="text-primary text-sm font-roboto inline-block md:text-base"
                     key={category.name}
                   >
@@ -161,9 +161,7 @@ const handleAddToCollection = async () => {
                   <li>
                     <strong>Tags:</strong> {data?.tags}
                   </li>
-                  <li>
-                    <strong>Categories:</strong> {data?.categories}
-                  </li>
+ 
                 </ul>
               </div>
 

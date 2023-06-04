@@ -55,9 +55,9 @@ const schemaRequest = new Schema(
         },
         status: {
             type: String,
-            enum: ["approved", "rejected", "waiting"],
+            enum: ["approved", "rejected", "pending"],
             required: true,
-            default: "waiting"
+            default: "pending"
         },
         categories: [
             String

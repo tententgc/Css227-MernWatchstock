@@ -28,7 +28,7 @@ const createRequest = async (req, res, next) => {
                     detail: req.body.detail || {},
                     photo: req.file ? req.file.filename : "",
                     user: req.user._id,
-                    status: req.body.status === "approved" || req.body.status === "rejected" ? req.body.status : "waiting",
+                    status: req.body.status === "approved" || req.body.status === "rejected" ? req.body.status : "pending",
                     tags: req.body.tags || [],
                     categories: req.body.categories || [],
                 });
