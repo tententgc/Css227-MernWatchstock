@@ -164,7 +164,7 @@ const ListPage = () => {
           produced: post.produced,
           color: post.color,
           price: post.price,
-          details: post.detail,
+          detail: post.detail,
           photo: post.photo,
           status: post.status,
           tags: post.tags,
