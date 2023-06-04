@@ -93,8 +93,8 @@ const Header = () => {
       <header className="container mx-auto px-5 flex justify-between py-4 items-center">
         <Link to="/">
           <h1 className="text-2xl font-bold text-dark-soft">
-             Watch<span className="text-orange-500">Stock</span>
-          </h1> 
+            Watch<span className="text-orange-500">Stock</span>
+          </h1>
         </Link>
         <div className="lg:hidden z-50">
           {navIsVisible ? (
@@ -153,17 +153,27 @@ const Header = () => {
                         type="button"
                         className="hover:bg-dark-hard hover:text-white px-4 py-2 text-white lg:text-dark-soft"
                       >
-                       Edit Collection 
+                        Edit Collection
                       </button>
 
                       {userState.userInfo && userState.userInfo.admin ? (
-                        <button
-                          onClick={() => navigate("/admin")}
-                          type="button"
-                          className="hover:bg-dark-hard hover:text-white px-4 py-2 text-white lg:text-dark-soft"
-                        >
-                          Admin Page
-                        </button>
+                        <>
+                          <button
+                            onClick={() => navigate("/admin")}
+                            type="button"
+                            className="hover:bg-dark-hard hover:text-white px-4 py-2 text-white lg:text-dark-soft"
+                          >
+                            Admin Page
+                          </button>
+
+                          <button
+                            onClick={() => navigate("/requestadmin")}
+                            type="button"
+                            className="hover:bg-dark-hard hover:text-white px-4 py-2 text-white lg:text-dark-soft"
+                          >
+                            Request Status
+                          </button>
+                        </>
                       ) : null}
                       <button
                         onClick={logoutHandler}

@@ -2,6 +2,7 @@ import React, { useState, useRef } from "react";
 import emailjs from "emailjs-com";
 import MainLayout from "../../components/MainLayout";
 import { images } from "../../constants";
+import toast from "react-hot-toast";
 
 const Contact = () => {
   const [name, setName] = useState("");
@@ -23,9 +24,11 @@ const Contact = () => {
       .then(
         (result) => {
           console.log(result.text);
+          toast.success("Message Sent, We will get back to you shortly");
         },
         (error) => {
           console.log(error.text);
+          toast.error("Message not sent, Please try again"); 
         }
       );
   };
@@ -48,7 +51,7 @@ const Contact = () => {
           >
             <div className="grid grid-cols-1 gap-6">
               <label className="block">
-                <span className="text-gray-700">Full Name</span>
+                <span className="text-gray-700 font-bold">Full Name</span>
                 <input
                   type="text"
                   value={name}
@@ -59,7 +62,7 @@ const Contact = () => {
                 />
               </label>
               <label className="block">
-                <span className="text-gray-700">Email Address</span>
+                <span className="text-gray-700 font-bold">Email Address</span>
                 <input
                   type="email"
                   value={email}
@@ -70,7 +73,7 @@ const Contact = () => {
                 />
               </label>
               <label className="block">
-                <span className="text-gray-700">Message</span>
+                <span className="text-gray-700 font-bold">Message</span>
                 <textarea
                   value={message}
                   name="message"

@@ -110,12 +110,12 @@ const ListPage = () => {
               >
                 <TableHead>
                   <TableRow>
-                    <TableCell style={{ color: "#ea580c", fontWeight: "bold" }}>
+                    <TableCell>
                       Name
                     </TableCell>
                     <TableCell
                       align="right"
-                      style={{ color: "#ea580c", fontWeight: "bold" }}
+                      
                     >
                       Action
                     </TableCell>
@@ -125,11 +125,7 @@ const ListPage = () => {
                   {posts.map((post) => (
                     <TableRow
                       key={post._id}
-                      sx={{
-                        "&:nth-of-type(odd)": {
-                          backgroundColor: "rgba(234, 88, 12, 0.1)",
-                        },
-                      }}
+                      
                     >
                       <TableCell component="th" scope="row">
                         <Grid container alignItems="center" spacing={2}>
@@ -237,7 +233,7 @@ const ListPage = () => {
                     <strong>Price:</strong> {modalData.price} <br />
                     <strong>Details:</strong> {JSON.stringify(modalData.detail)}{" "}
                     <br />
-                    <strong>Status:</strong> {modalData.status} <br />
+                    
                     <strong>Tags:</strong> {modalData.tags.join(", ")} <br />
                   </Typography>
                   <Button

@@ -74,11 +74,30 @@ const ListPage = () => {
         <Grid container spacing={2}>
           <Grid item xs={12}>
             <div className="mb-4 flex flex-col sm:flex-row justify-between items-center">
-              <Typography variant="h4" component="div" gutterBottom>
-                All yours requests
+              <Typography
+                variant="h4"
+                component="div"
+                gutterBottom
+                style={{ color: "#ea580c", fontWeight: "bold" }}
+              >
+                All Yours Requests
               </Typography>
               <div className="space-y-4 sm:space-y-0 sm:space-x-4 flex flex-wrap">
-                <Button variant="contained" href="/createrequest">
+                <Button
+                  variant="contained"
+                  href="/createrequest"
+                  sx={{
+                    color: "#fff",
+                    borderColor: "#f97316",
+                    backgroundColor: "#f97316",
+                    rounded: true,
+                    "&:hover": {
+                      backgroundColor: "#fff",
+                      color: "#f97316",
+                      borderColor: "#fff",
+                    },
+                  }}
+                >
                   Create New Request
                 </Button>
               </div>

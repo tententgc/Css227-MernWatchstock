@@ -29,7 +29,7 @@ return (
     </Link>
     <div className="p-5">
       <Link to={`/item/${post.slug}`}>
-        <h2 className="font-roboto font-bold text-xl text-dark-soft md:text-2xl lg:text-[28px]">
+        <h2 className="font-roboto font-bold text-xl text-dark-soft md:text-2xl lg:text-[28px] ">
           {post.title}
         </h2>
         <p className="text-dark-light mt-3 text-sm md:text-lg">

@@ -11,6 +11,7 @@ import {
   Input,
   Grid
 } from "@mui/material";
+import { useNavigate } from "react-router-dom"; 
 const CreateCollection = () => {
   const [title, setTitle] = useState("");
   const [brand, setBrand] = useState("");
@@ -24,6 +25,8 @@ const CreateCollection = () => {
   const [image, setImage] = useState("");
   const [tags, setTags] = useState([]);
   const [slug, setSlug] = useState(uuidv4());
+
+  const navigate = useNavigate(); 
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -64,6 +67,7 @@ const CreateCollection = () => {
       setImage("");
       setTags([]);
       setSlug(uuidv4());
+      navigate("/admin");
     } catch (err) {
       console.error(err);
     }
@@ -84,7 +88,7 @@ const CreateCollection = () => {
             <Grid item xs={12} sm={6}>
               <TextField
                 type="text"
-                placeholder="Title"
+                placeholder="Name"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 fullWidth

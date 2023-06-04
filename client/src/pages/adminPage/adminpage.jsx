@@ -135,15 +135,31 @@ const handleUpdatePost = async () => {
     <MainLayout>
       <div className="p-4 h-full min-h-screen">
         <div className="mb-4 flex flex-col sm:flex-row justify-between items-center">
-          <Typography variant="h4" component="div" gutterBottom>
+          <Typography
+            variant="h4"
+            component="div"
+            gutterBottom
+            style={{ color: "#ea580c", fontWeight: "bold" }}
+          >
             All Collection
           </Typography>
           <div className="space-y-4 sm:space-y-0 sm:space-x-4 flex flex-wrap">
-            <Button variant="contained" href="/createcollection">
+            <Button
+              variant="contained"
+              href="/createcollection"
+              sx={{
+                color: "#fff",
+                borderColor: "#f97316",
+                backgroundColor: "#f97316",
+                rounded: true,
+                "&:hover": {
+                  backgroundColor: "#fff",
+                  color: "#f97316",
+                  borderColor: "#fff",
+                },
+              }}
+            >
               Create New Collection
-            </Button>
-            <Button variant="contained" href="/requestadmin">
-              Request Status
             </Button>
           </div>
         </div>
@@ -201,9 +217,16 @@ const handleUpdatePost = async () => {
             onClose={() => setShowEditModal(false)}
             aria-labelledby="modal-modal-title"
             aria-describedby="modal-modal-description"
-            style={{ backgroundColor: "white" , overflow: "auto"}}
+            style={{ backgroundColor: "white", overflow: "auto" }}
           >
-            <Box sx={{ p: 4, backgroundColor: "#f8f9fa" , maxHeight: '100vh', overflowY: 'auto' }}>
+            <Box
+              sx={{
+                p: 4,
+                backgroundColor: "#f8f9fa",
+                maxHeight: "100vh",
+                overflowY: "auto",
+              }}
+            >
               <Typography
                 id="modal-modal-title"
                 variant="h4"
@@ -292,7 +315,6 @@ const handleUpdatePost = async () => {
             </Box>
           </Modal>
         )}
-
       </div>
     </MainLayout>
   );

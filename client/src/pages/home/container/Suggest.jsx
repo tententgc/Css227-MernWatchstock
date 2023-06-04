@@ -31,7 +31,7 @@ const Articles = () => {
   return (
     <section className="flex flex-col container mx-auto px-5 py-10 bg-primary-300">
       <div className="flex flex-col items-center justify-center space-y-5 mt-5">
-        <h1 className="text-4xl font-bold text-center text-black">
+        <h1 className="text-4xl font-bold text-center text-orange-600">
           News Collection
         </h1>
       </div>

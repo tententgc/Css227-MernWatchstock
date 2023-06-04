@@ -26,11 +26,13 @@ import CloseIcon from "@mui/icons-material/Close";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import { toast } from "react-hot-toast";
 
 const ListPage = () => {
   const [posts, setPosts] = useState([]);
   const navigate = useNavigate();
 
+  
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalData, setModalData] = useState(null);
   const theme = useTheme();
@@ -72,6 +74,7 @@ const ListPage = () => {
       });
       setPosts(posts.filter((post) => post.slug !== slug));
     } catch (error) {
+      toast.error(error.message);
       console.log(error);
     }
   };
@@ -125,15 +128,32 @@ const ListPage = () => {
     <MainLayout>
       <div className="p-4 h-full min-h-screen">
         <div className="mb-4 flex flex-col sm:flex-row justify-between items-center">
-          <Typography variant="h4" component="div" gutterBottom>
+          <Typography
+            variant="h4"
+            component="div"
+            gutterBottom
+            style={{ color: "#ea580c", fontWeight: "bold" }}
+          >
             All User Request Status
           </Typography>
           <div className="space-y-4 sm:space-y-0 sm:space-x-4 flex flex-wrap">
-            <Button variant="contained" href="/createrequest">
+            <Button
+              variant="contained"
+              href="/createrequest"
+              sx={{
+                color: "#fff",
+                borderColor: "#f97316",
+                backgroundColor: "#f97316",
+                rounded: true,
+                "&:hover": {
+                  backgroundColor: "#fff",
+                  color: "#f97316",
+                  borderColor: "#fff",
+                },
+              }}
+            >
+              {" "}
               Create Request
-            </Button>
-            <Button variant="contained" href="/admin">
-              Admin Dashboard
             </Button>
           </div>
         </div>
@@ -283,7 +303,6 @@ const ListPage = () => {
                       {JSON.stringify(modalData.detail)} <br />
                       <strong>Status:</strong> {modalData.status} <br />
                       <strong>Tags:</strong> {modalData.tags.join(", ")} <br />
-                    
                     </Typography>
                     <Button
                       onClick={() => {
