@@ -30,6 +30,7 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { toast } from "react-hot-toast";
+import EditIcon from "@mui/icons-material/Edit"; 
 
 const ListPage = () => {
   const [posts, setPosts] = useState([]);
@@ -42,6 +43,7 @@ const ListPage = () => {
   const [statusFilter, setStatusFilter] = useState("");
   const [sortedPosts, setSortedPosts] = useState([]);
   const [sortType, setSortType] = useState("");
+  const [showEditModal, setShowEditModal] = useState(false); 
 
 
   useEffect(() => {
@@ -141,6 +143,12 @@ const ListPage = () => {
     setIsModalOpen(true);
   };
 
+  const handleEdit = (post) => { 
+    setModalData(post); 
+    setShowEditModal(true);
+  }
+
+  
   const handleStatusChange = async (slug, status, post) => {
     try {
       const account = localStorage.getItem("account");

@@ -8,7 +8,7 @@ import { v4 as uuidv4 } from "uuid";
 const createRequest = async (req, res, next) => {
     try {
         console.log(req.body); 
-        const upload = uploadPicture.single('postPicture');
+        const upload = uploadPicture.single('requestPicture');
         upload(req, res, async function (err) {
             if (err) {
                 const error = new Error("An unknown error occured when uploading " + err.message);
@@ -138,4 +138,105 @@ const getrequestByUserId = async (req, res, next) => {
     }
 };
 
-export { createRequest, deleterequest, getRequest, getAllrequests, getrequestByUserId,updateRequestStatus};
+const updateRequest = async (req, res, next) => {
+    try {
+        const request = await Request.findOne({ slug: req.params.slug });
+
+        if (!request) {
+            const error = new Error("Request was not found");
+            next(error);
+            return;
+        }
+
+        const upload = uploadPicture.single("requestPicture");
+
+        const handleUpdateRequestData = async (data) => {
+            try {
+                const parsedData = JSON.parse(data.document);
+                const {
+                    title,
+                    detail,
+                    slug,
+                    tags,
+                    categories,
+                    brand,
+                    series,
+                    model,
+                    photo,
+                    produced,
+                    color,
+                    price,
+                    likecount
+                } = parsedData;
+
+                console.log("before update", request.photo);
+
+                // Check if the new photo file exists
+                if (photo && !(await fileExists(photo))) {
+                    console.log(`File ${photo} doesn't exist, won't update request.photo.`);
+                } else {
+                    request.photo = photo || request.photo;
+                }
+
+                // Update other properties
+                request.title = title || request.title;
+                request.slug = slug || request.slug;
+                request.detail = detail || request.detail;
+                request.tags = tags || request.tags;
+                request.categories = categories || request.categories;
+                request.brand = brand || request.brand;
+                request.series = series || request.series;
+                request.model = model || request.model;
+                request.produced = produced || request.produced;
+                request.color = color || request.color;
+                request.price = price || request.price;
+                request.likecount = likecount || request.likecount;
+
+                console.log("after update", request.photo);
+
+                const updatedRequest = await request.save();
+                return res.json(updatedRequest);
+            } catch (error) {
+                next(error);
+            }
+        };
+
+        // Function to check if a file exists
+        async function fileExists(filePath) {
+            try {
+                await fs.access(filePath);
+                return true;
+            } catch (error) {
+                return false;
+            }
+        }
+
+        upload(req, res, async function (err) {
+            if (err) {
+                const error = new Error(
+                    "An unknown error occurred when uploading: " + err.message
+                );
+                next(error);
+            } else {
+                // everything went well
+                if (req.file) {
+                    let filename = request.photo;
+                    if (filename) {
+                        fileRemover(filename);
+                    }
+                    request.photo = req.file.filename;
+
+                    handleUpdateRequestData(req.body);
+                } else {
+                    console.log("Hi there");
+                    handleUpdateRequestData(req.body);
+                }
+            }
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
+
+export { createRequest, deleterequest, getRequest, getAllrequests, getrequestByUserId,updateRequestStatus, updateRequest};
