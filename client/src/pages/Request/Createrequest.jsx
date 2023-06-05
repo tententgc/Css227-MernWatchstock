@@ -5,7 +5,16 @@ import { v4 as uuidv4 } from "uuid";
 import BASEURL from "../../data/Baseurl";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
-import { Container, Grid, TextField, Input, Button,Typography } from "@mui/material";
+import {
+  Container,
+  Grid,
+  TextField,
+  Input,
+  Button,
+  Typography,
+  IconButton,
+} from "@mui/material";
+import ArrowBack from "@mui/icons-material/ArrowBack"
 
 const CreateCollection = () => {
   const [title, setTitle] = useState("");
@@ -20,7 +29,9 @@ const CreateCollection = () => {
   const [image, setImage] = useState("");
   const [tags, setTags] = useState([]);
   const [slug, setSlug] = useState(uuidv4());
+
   const navigate = useNavigate(); 
+  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -74,11 +85,26 @@ const CreateCollection = () => {
           minHeight: "100vh",
           display: "flex",
           flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "center",
+          alignItems: "flex-start", // Updated property
+          justifyContent: "flex-start", // Updated property
+          padding: "0 16px", // Optional: Add padding to adjust the spacing
         }}
       >
-        <Typography variant="h4" component="h1" align="center" gutterBottom>
+        <IconButton
+          edge="start"
+          color="inherit"
+          onClick={() => navigate("/request")}
+          sx={{ mt: 2 }}
+        >
+          <ArrowBack />
+        </IconButton>
+        <Typography
+          variant="h4"
+          component="h1"
+          align="left"
+          gutterBottom
+          style={{ color: "#ea580c", fontWeight: "bold" }}
+        >
           Create Request
         </Typography>
         <form onSubmit={handleSubmit}>

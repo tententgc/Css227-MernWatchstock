@@ -11,8 +11,13 @@ import {
   Input,
   Grid,
   Typography,
+  IconButton
 } from "@mui/material";
 import { useNavigate } from "react-router-dom"; 
+
+import ArrowBack from "@mui/icons-material/ArrowBack"
+
+
 const CreateCollection = () => {
   const [title, setTitle] = useState("");
   const [brand, setBrand] = useState("");
@@ -80,12 +85,27 @@ const CreateCollection = () => {
           minHeight: "100vh",
           display: "flex",
           flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "center",
+          alignItems: "flex-start", // Updated property
+          justifyContent: "flex-start", // Updated property
+          padding: "0 16px", // Optional: Add padding to adjust the spacing
         }}
       >
-        <Typography variant="h4" component="h1" align="center" gutterBottom>
-          Create Collection
+        <IconButton
+          edge="start"
+          color="inherit"
+          onClick={() => navigate("/admin")}
+          sx={{ mt: 2 }}
+        >
+          <ArrowBack />
+        </IconButton>
+        <Typography
+          variant="h4"
+          component="h1"
+          align="left"
+          gutterBottom
+          style={{ color: "#ea580c", fontWeight: "bold" }}
+        >
+          Create Collection 
         </Typography>
         <form onSubmit={handleSubmit}>
           <Grid container spacing={2}>
