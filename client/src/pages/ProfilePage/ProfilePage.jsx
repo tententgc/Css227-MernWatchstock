@@ -32,7 +32,7 @@ const ProfilePage = () => {
     fetchData();
   }, []);
 
-  console.log(profile);
+
   if (!profile) return <div>Loading...</div>;
 
   return (

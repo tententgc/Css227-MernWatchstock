@@ -170,8 +170,29 @@ const ListPage = () => {
           tags: post.tags,
           categories: post.categories,
         };
+        try {
+          const { data: mycol } = await axios.get(
+            `${BaseUrl}/api/posts`,
+            config
+          );
 
-        await axios.post(`${BaseUrl}/api/posts`, postPayload, config);
+          // Check if title exists in collection
+          const titleExists = mycol.some(
+            (item) => item.title === postPayload.title
+          );
+
+          if (!titleExists) {
+            // If title does not exist, post new data
+            await axios.post(`${BaseUrl}/api/posts`, postPayload, config);
+            toast.success("Successfully added to collection!");
+          } else {
+            // If title exists, alert error
+            toast.error("Error: Name already exists in collection!");
+            // alert("Error: Name already exists in collection!");
+          }
+        } catch (error) {
+          console.error(error);
+        }
       }
 
       setPosts(
@@ -182,7 +203,7 @@ const ListPage = () => {
     }
   };
   return (
-   <MainLayout>
+    <MainLayout>
       <Box sx={{ flexGrow: 1, p: 2 }}>
         <Grid container spacing={2}>
           <Grid item xs={12}>
@@ -244,17 +265,14 @@ const ListPage = () => {
               onChange={(e) => setSortType(e.target.value)}
               fullWidth
             >
-              <MenuItem value="">Sort By</MenuItem>
-              <MenuItem value="AZ">A-Z</MenuItem>
-              <MenuItem value="ZA">Z-A</MenuItem>
-              <MenuItem value="newest">Newest</MenuItem>
-              <MenuItem value="oldest">Oldest</MenuItem>
+              <MenuItem value="default">Sort by..</MenuItem>
+              <MenuItem value="AZ">Name A-Z</MenuItem>
+              <MenuItem value="ZA">Name Z-A</MenuItem>
+              <MenuItem value="newest">Date New-Old</MenuItem>
+              <MenuItem value="oldest">Date Old-New</MenuItem>
             </Select>
           </Grid>
-  
-  
-</Grid>
-
+        </Grid>
 
         <TableContainer component={Paper}>
           <Table aria-label="simple table">
@@ -354,8 +372,11 @@ const ListPage = () => {
                 boxShadow: 24,
                 p: 4,
                 display: "flex", // Add display flex
-                flexDirection: "row", // Make it horizontal flex container
+
                 justifyContent: "space-between",
+                overflow: "auto", // Add this line
+                maxHeight: "90%",
+                flexDirection: isMobile ? "column" : "row",
               }}
             >
               {modalData && (
@@ -426,7 +447,6 @@ const ListPage = () => {
           </Modal>
         )}
       </Box>
-      
     </MainLayout>
   );
 };
