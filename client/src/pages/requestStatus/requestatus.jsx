@@ -31,6 +31,7 @@ import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { toast } from "react-hot-toast";
 import EditIcon from "@mui/icons-material/Edit"; 
+import SaveIcon from "@mui/icons-material/Save"; 
 
 const ListPage = () => {
   const [posts, setPosts] = useState([]);
@@ -44,6 +45,7 @@ const ListPage = () => {
   const [sortedPosts, setSortedPosts] = useState([]);
   const [sortType, setSortType] = useState("");
   const [showEditModal, setShowEditModal] = useState(false); 
+    const [selectedPost, setSelectedPost] = useState(null);
 
 
   useEffect(() => {
@@ -144,11 +146,62 @@ const ListPage = () => {
   };
 
   const handleEdit = (post) => { 
-    setModalData(post); 
-    setShowEditModal(true);
+    setSelectedPost(post);
+    setShowEditModal(true); 
   }
 
-  
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setSelectedPost((prevSelectedPost) => ({
+      ...prevSelectedPost,
+      [name]: value,
+    }));
+  };
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    setSelectedPost((prevSelectedPost) => ({
+      ...prevSelectedPost,
+      postPicture: [file],
+    }));
+  };
+
+
+const handleUpdateRequest = async () => {
+  try {
+    const account = localStorage.getItem("account");
+    const token = JSON.parse(account).token;
+
+    const formData = new FormData();
+    const postData = { ...selectedPost };
+
+    if (postData.postPicture && postData.postPicture[0]) {
+      formData.append("postPicture", postData.postPicture[0]);
+    }
+
+    delete postData.postPicture;
+    console.log(postData)
+    formData.append("document", JSON.stringify(postData));
+
+    const response = await axios.patch(
+      `${BaseUrl}/api/requests/admin/${selectedPost.slug}`,
+      formData,
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
+
+    setPosts((prevPosts) =>
+      prevPosts.map((post) =>
+        post.slug === selectedPost.slug ? response.data : post
+      )
+    );
+    setShowEditModal(false);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
   const handleStatusChange = async (slug, status, post) => {
     try {
       const account = localStorage.getItem("account");
@@ -352,6 +405,12 @@ const ListPage = () => {
                     >
                       <VisibilityIcon />
                     </IconButton>
+                    <IconButton
+                      onClick={() => handleEdit(post)}
+                      color="primary"
+                    >
+                      <EditIcon />
+                    </IconButton>
                   </TableCell>
                 </TableRow>
               ))}
@@ -451,6 +510,110 @@ const ListPage = () => {
                   </div>
                 </>
               )}
+            </Box>
+          </Modal>
+        )}
+        {showEditModal && selectedPost && (
+          <Modal
+            open={showEditModal}
+            onClose={() => setShowEditModal(false)}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+            style={{ backgroundColor: "white", overflow: "auto" }}
+          >
+            <Box
+              sx={{
+                p: 4,
+                backgroundColor: "#f8f9fa",
+                maxHeight: "100vh",
+                overflowY: "auto",
+              }}
+            >
+              <Typography
+                id="modal-modal-title"
+                variant="h4"
+                component="h2"
+                style={{ color: "#ea580c", fontWeight: "bold" }}
+              >
+                Edit Collection
+              </Typography>
+
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  handleUpdateRequest();
+                }}
+              >
+                <div className="flex flex-wrap -mx-3">
+                  {[
+                    "title",
+                    "tags",
+                    "brand",
+                    "price",
+                    "series",
+                    "model",
+                    "produced",
+                    "color",
+                    "detail",
+                  ].map((name, index) => (
+                    <div
+                      key={name}
+                      className="w-full md:w-1/2 px-3 mb-6 md:mb-0"
+                    >
+                      <label
+                        htmlFor={name}
+                        className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                      >
+                        {name.charAt(0).toUpperCase() + name.slice(1)}:
+                      </label>
+                      <input
+                        type={name === "price" ? "number" : "text"}
+                        id={name}
+                        name={name}
+                        value={selectedPost[name]}
+                        onChange={handleInputChange}
+                        className="appearance-none block w-full bg-gray-100 text-gray-700 border rounded-lg py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:ring-2 focus:ring-ea580c"
+                      />
+                    </div>
+                  ))}
+                </div>
+                <div>
+                  <label
+                    htmlFor="postPicture"
+                    className="block text-sm font-medium text-gray-700"
+                  >
+                    Photo:
+                  </label>
+                  <input
+                    type="file"
+                    id="postPicture"
+                    name="postPicture"
+                    accept="image/*"
+                    onChange={handleFileChange}
+                    className="mt-1 block border-gray-300 rounded-md shadow-sm sm:text-sm focus:outline-none focus:ring-2 focus:ring-ea580c"
+                  />
+                </div>
+                <Box sx={{ mt: 2 }}>
+                  <Button
+                    type="submit"
+                    color="primary"
+                    variant="contained"
+                    style={{ backgroundColor: "#ea580c", color: "white" }}
+                    startIcon={<SaveIcon />}
+                  >
+                    Update
+                  </Button>
+                  <Button
+                    onClick={() => setShowEditModal(false)}
+                    color="secondary"
+                    variant="outlined"
+                    style={{ color: "#ea580c", borderColor: "#ea580c" }}
+                    startIcon={<CloseIcon />}
+                  >
+                    Close
+                  </Button>
+                </Box>
+              </form>
             </Box>
           </Modal>
         )}
