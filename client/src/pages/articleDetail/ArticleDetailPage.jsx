@@ -10,7 +10,6 @@ import parse from "html-react-parser";
 import axios from "axios";
 import BaseUrl from "../../data/Baseurl";
 
-
 import BreadCrumbs from "../../components/BreadCrumbs";
 import CommentsContainer from "../../components/comments/CommentsContainer";
 import MainLayout from "../../components/MainLayout";
@@ -20,7 +19,7 @@ import { getAllPosts, getSinglePost } from "../../services/index/posts";
 import ArticleDetailSkeleton from "./components/ArticleDetailSkeleton";
 import ErrorMessage from "../../components/ErrorMessage";
 import { useSelector } from "react-redux";
-
+import { toast } from "react-hot-toast";
 const ArticleDetailPage = () => {
   const { slug } = useParams();
   const userState = useSelector((state) => state.user);
@@ -45,52 +44,54 @@ const ArticleDetailPage = () => {
     },
   });
 
-const handleAddToCollection = async () => {
-  const payload = {
-    title: data?.title,
-    photo: data?.photo,
-    categories: data?.categories,
-    tags: data?.tags,
-    model: data?.model,
-    brand: data?.brand,
-    series: data?.series,
-    produced: data?.produced,
-    color: data?.color,
-    price: data?.price,
-    detail: data?.detail,
-    slug: data?.slug, 
-    postId: data?._id, 
-  };
+  const handleAddToCollection = async () => {
+    const payload = {
+      title: data?.title,
+      photo: data?.photo,
+      categories: data?.categories,
+      tags: data?.tags,
+      model: data?.model,
+      brand: data?.brand,
+      series: data?.series,
+      produced: data?.produced,
+      color: data?.color,
+      price: data?.price,
+      detail: data?.detail,
+      slug: data?.slug,
+      postId: data?._id,
+    };
 
   try {
     const account = localStorage.getItem("account");
     const token = JSON.parse(account).token;
+    const user_id = JSON.parse(account)._id;
 
     // Use axios to send a PUT request to the /api/users/addpost endpoint, including the post id in the request
-    const response = await axios.post(
-      `${BaseUrl}/api/users/addpost`,
-      payload,
-      {
-        headers: { Authorization: `Bearer ${token}` },
-      }
+    const config = {
+      headers: { Authorization: `Bearer ${token}` },
+    };
+    const { data: mycol } = await axios.get(
+      `${BaseUrl}/api/users/getuserposts/${user_id}`,
+      config
     );
 
-    if (response.status === 200) {
-      alert(" added to collection successfully");
-      console.log(" added to collection successfully");
-      // Use navigate to redirect to the success page
+    const titleExist = mycol.posts.some((item) => item.title === payload.title);
+
+    if (!titleExist) {
+      await axios.post(`${BaseUrl}/api/users/addpost`, payload, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      toast.success("Added to your collection");
     } else {
-      alert("Failed to add  to collection");
-      console.error("Failed to add to collection");
+      toast.error("This item is already in your collection");
     }
   } catch (error) {
-    alert("Error occurred while adding article to collection");
-    console.error("Error occurred while adding article to collection:", error);
+    console.log(error);
   }
-};
 
+  };
 
-  return (
+ return (
     <MainLayout>
       {isLoading ? (
         <ArticleDetailSkeleton />
@@ -98,8 +99,8 @@ const handleAddToCollection = async () => {
         <ErrorMessage message="Couldn't fetch the post detail" />
       ) : (
         <section className="container mx-auto max-w-5xl px-5 py-5">
-          <div className="flex flex-col lg:flex-row lg:gap-x-5">
-            <div className="lg:w-1/2">
+          <div className="flex flex-col gap-5 md:flex-row md:gap-5">
+            <div className="w-full md:w-1/2">
               <img
                 className="rounded-xl w-full h-96 object-cover"
                 src={
@@ -109,8 +110,24 @@ const handleAddToCollection = async () => {
                 }
                 alt={data?.title}
               />
+
+              <div className="mt-4">
+             
+                <ul className="mt-2">
+                  {/* Your additional information here */}
+                </ul>
+              </div>
+
+              <div className="mt-4">
+                <button
+                  className="bg-orange-600 text-white font-medium py-2 px-4 rounded-lg"
+                  onClick={handleAddToCollection}
+                >
+                  Add to my collection
+                </button>
+              </div>
             </div>
-            <div className="lg:w-1/2">
+            <div className="w-full md:w-1/2">
               <BreadCrumbs data={breadCrumbsData} />
               <h1 className="text-2xl font-medium font-roboto mt-4 text-dark-hard md:text-3xl">
                 {data?.title}
@@ -161,17 +178,11 @@ const handleAddToCollection = async () => {
                   <li>
                     <strong>Tags:</strong> {data?.tags}
                   </li>
- 
                 </ul>
               </div>
 
               <div className="mt-4">
-                <button
-                  className="bg-orange-600 text-white font-medium py-2 px-4 rounded-lg"
-                  onClick={handleAddToCollection}
-                >
-                  Add to my collection
-                </button>
+     
               </div>
             </div>
           </div>

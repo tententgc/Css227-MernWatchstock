@@ -21,18 +21,21 @@ const Articles = () => {
   });
 
   // Filter and sort the data based on search query
-  const filteredData = data
-    ?.filter((post) =>
-      post.title.toLowerCase().includes(searchQuery.toLowerCase())
-    )
-    .sort((a, b) => a.title.localeCompare(b.title))
-    .slice(0, 6); 
+const filteredData = data
+  ?.filter((post) =>
+    post.title.toLowerCase().includes(searchQuery.toLowerCase())
+  )
+  .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)) // Sort by createAt in descending order (new to old)
+
+  .slice(0, 6); 
+
+
 
   return (
     <section className="flex flex-col container mx-auto px-5 py-10 bg-primary-300">
       <div className="flex flex-col items-center justify-center space-y-5 mt-5">
         <h1 className="text-4xl font-bold text-center text-orange-600">
-          News Collection
+          Newest Collection
         </h1>
       </div>
 

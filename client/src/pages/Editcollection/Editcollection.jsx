@@ -152,8 +152,8 @@ const ListPage = () => {
               variant="outlined"
             >
               <MenuItem value="default">Sort by...</MenuItem>
-              <MenuItem value="titleAZ">Title A-Z</MenuItem>
-              <MenuItem value="titleZA">Title Z-A</MenuItem>
+              <MenuItem value="titleAZ">Name A-Z</MenuItem>
+              <MenuItem value="titleZA">Name Z-A</MenuItem>
               <MenuItem value="dateNewOld">Date New-Old</MenuItem>
               <MenuItem value="dateOldNew">Date Old-New</MenuItem>
             </Select>
@@ -234,8 +234,10 @@ const ListPage = () => {
               boxShadow: 24,
               p: 4,
               display: "flex", // Add display flex
-              flexDirection: "row", // Make it horizontal flex container
+               flexDirection: isMobile ? "column" : "row", // Make it horizontal flex container
               justifyContent: "space-between",
+              overflow: "auto", // Add this line
+              maxHeight: "90%",
             }}
           >
             {modalData && (

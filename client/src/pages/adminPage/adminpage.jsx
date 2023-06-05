@@ -30,6 +30,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 
+
 const ListPage = () => {
   const [posts, setPosts] = useState([]);
   const [filteredPosts, setFilteredPosts] = useState([]);
@@ -313,7 +314,7 @@ const handleUpdatePost = async () => {
                 component="h2"
                 style={{ color: "#ea580c", fontWeight: "bold" }}
               >
-                Edit Post
+                Edit Collection
               </Typography>
 
               <form

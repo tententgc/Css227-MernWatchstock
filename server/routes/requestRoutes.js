@@ -6,7 +6,8 @@ import {
     getAllrequests,
     getRequest,
     deleterequest,
-    updateRequestStatus
+    updateRequestStatus,
+    updateRequest
 } from "../controllers/RequestControllers";
 
 import { authGuard, adminGuard } from "../middleware/authMiddleware"; 
@@ -21,6 +22,9 @@ router.route("/:slug")
 router.route("/status/:slug") 
 .put(authGuard,adminGuard,updateRequestStatus)
 .patch(authGuard,adminGuard,updateRequestStatus); 
+
+router.route("/admin/:slug") 
+.patch(authGuard,adminGuard,updateRequest)
 
 
 export default router; 
