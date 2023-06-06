@@ -8,7 +8,7 @@ import { v4 as uuidv4 } from "uuid";
 const createRequest = async (req, res, next) => {
     try {
         console.log(req.body); 
-        const upload = uploadPicture.single('requestPicture');
+        const upload = uploadPicture.single('postPicture');
         upload(req, res, async function (err) {
             if (err) {
                 const error = new Error("An unknown error occured when uploading " + err.message);
@@ -26,7 +26,7 @@ const createRequest = async (req, res, next) => {
                     likecount: req.body.likecount || 0,
                     slug: req.body.slug || uuidv4(),
                     detail: req.body.detail || {},
-                    photo: req.file ? req.file.filename : "",
+                    photo: req.file ? req.file.filename : "" || req.body.photo,
                     user: req.user._id,
                     status: req.body.status === "approved" || req.body.status === "rejected" ? req.body.status : "pending",
                     tags: req.body.tags || [],
@@ -148,7 +148,7 @@ const updateRequest = async (req, res, next) => {
             return;
         }
 
-        const upload = uploadPicture.single("requestPicture");
+        const upload = uploadPicture.single("postPicture");
 
         const handleUpdateRequestData = async (data) => {
             try {

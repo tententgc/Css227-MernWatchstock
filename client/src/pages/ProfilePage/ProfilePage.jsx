@@ -39,7 +39,7 @@ const ProfilePage = () => {
     <MainLayout>
       <div className="container mx-auto p-4">
         <div className="flex justify-center">
-          <div className="bg-orange-600 p-4 rounded shadow-md w-full md:w-2/3 lg:w-1/2">
+          <div className="bg-orange-500 p-4 rounded-3xl shadow-md w-full md:w-2/3 lg:w-1/2">
             <div className="flex flex-col items-center">
               <div className="rounded-full overflow-hidden mb-4">
                 <div
@@ -48,7 +48,7 @@ const ProfilePage = () => {
                     height: "150px",
                     borderRadius: "50%",
                     overflow: "hidden",
-                    border: "5px solid #f97316",
+                    border: "5px solid #fff",
                     boxShadow: "0px 0px 10px 5px #f97316",
                   }}
                 >

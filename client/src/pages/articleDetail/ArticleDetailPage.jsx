@@ -120,7 +120,7 @@ const ArticleDetailPage = () => {
 
               <div className="mt-4">
                 <button
-                  className="bg-orange-600 text-white font-medium py-2 px-4 rounded-lg"
+                  className="bg-orange-600 text-white font-medium py-2 px-4 rounded-lg hover:bg-orange-500"
                   onClick={handleAddToCollection}
                 >
                   Add to my collection

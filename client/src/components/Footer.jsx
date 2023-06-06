@@ -21,7 +21,7 @@ const Footer = () => {
           Contact
         </a>
         <a
-          href="www.tententgc.com"
+          href="https://www.tententgc.com"
           className="text-orange-600 hover:text-orange-500"
         >
           About me

@@ -18,6 +18,7 @@ const Articles = () => {
       toast.error(error.message);
       console.log(error);
     },
+    refetchInterval: 100,
   });
 
   // Filter and sort the data based on search query
@@ -39,7 +40,7 @@ const filteredData = data
         </h1>
       </div>
 
-      <div className="flex justify-center mt-10">
+      {/* <div className="flex justify-center mt-10">
         <input
           type="text"
           placeholder="Search by name..."
@@ -47,7 +48,7 @@ const filteredData = data
           onChange={(e) => setSearchQuery(e.target.value)}
           className="border border-gray-300 px-4 py-2 rounded-lg shadow-lg w-full md:w-1/2 focus:border-orange-600"
         />
-      </div>
+      </div> */}
 
       <div className="flex flex-wrap justify-center gap-6 mt-10">
         {isLoading ? (
