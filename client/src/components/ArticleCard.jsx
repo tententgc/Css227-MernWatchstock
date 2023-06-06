@@ -32,12 +32,13 @@ return (
         <h2 className="font-roboto font-bold text-xl text-dark-soft md:text-2xl lg:text-[28px] ">
           {post.title}
         </h2>
-        <p className="text-dark-light mt-3 text-sm md:text-lg">
-          {post.caption}
-        </p>
       </Link>
       <div className="flex justify-between flex-nowrap items-center mt-6">
-        <div className="flex items-center gap-x-2 md:gap-x-2.5"></div>
+        <div className="flex items-center gap-x-2 md:gap-x-2.5">
+          <h4 className="font-bold italic text-dark-soft text-sm md:text-base">
+            {post.brand.toUpperCase() }
+          </h4>
+        </div>
         <span className="font-bold text-dark-light italic text-sm md:text-base">
           {formatDate(post.createdAt)}
         </span>

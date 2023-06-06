@@ -19,7 +19,7 @@ import Createrequest from "./pages/Request/Createrequest";
 import Requestatus from "./pages/requestStatus/requestatus";
 function App() {
   return (
-    <div className="App font-roboto">
+    <div className="App font-opensans">
       <Routes>
         <Route index path="/" element={<HomePage />} />
         <Route path="/item/:slug" element={<ArticleDetailPage />} />

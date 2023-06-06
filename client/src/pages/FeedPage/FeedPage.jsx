@@ -12,6 +12,7 @@ import MainLayout from "../../components/MainLayout";
 const Articles = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [sortOrder, setSortOrder] = useState("");
+  const [brandFilter, setBrandFilter] = useState({});
 
   const { data, isLoading, isError } = useQuery({
     queryFn: () => getAllPosts(),
@@ -20,7 +21,7 @@ const Articles = () => {
       toast.error(error.message);
       console.log(error);
     },
-    refetchInterval: 5000,
+    refetchInterval: 100,
   });
 
   
@@ -42,6 +43,7 @@ const Articles = () => {
  const filteredData = data
    ?.filter((post) =>
      post.title.toLowerCase().includes(searchQuery.toLowerCase())
+   
    )
    .sort(sortPosts);
 
@@ -70,8 +72,8 @@ const Articles = () => {
             <option value="">Sort by </option>
             <option value="name-asc">Name A-Z</option>
             <option value="name-desc">Name Z-A</option>
-            <option value="date-asc">Date First-Last</option>
-            <option value="date-desc">Date Last-First</option>
+            <option value="date-asc">Date Old-New</option>
+            <option value="date-desc">Date New-Old</option>
           </select>
         </div>
 

@@ -29,6 +29,7 @@ import SaveIcon from "@mui/icons-material/Save";
 import CloseIcon from "@mui/icons-material/Close";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import { toast } from "react-hot-toast";
 
 
 const ListPage = () => {
@@ -159,8 +160,10 @@ const handleUpdatePost = async () => {
       )
     );
     setShowEditModal(false);
+    toast.success("Post updated successfully");
   } catch (error) {
     console.log(error);
+    toast.error("Something went wrong");
   }
 };
 
