@@ -535,7 +535,7 @@ const handleUpdateRequest = async () => {
                 component="h2"
                 style={{ color: "#ea580c", fontWeight: "bold" }}
               >
-                Edit Collection
+                Edit Request
               </Typography>
 
               <form
