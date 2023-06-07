@@ -12,11 +12,11 @@ import NotFoundPage from "./pages/Notfound/notfound";
 import Adminpage from './pages/adminPage/adminpage';
 import Profile from "./pages/ProfilePage/ProfilePage"; 
 import FeedPage from "./pages/FeedPage/FeedPage"
-import Editcollection from "./pages/EditCollection/Editcollection";
 import Request from "./pages/Request/request"; 
-import Createcollection from "./pages/CreateCollection/Createcollection";
 import Createrequest from "./pages/Request/Createrequest";
 import Requestatus from "./pages/requestStatus/requestatus";
+import Createcollection from "./pages/Createcollection/Createcollection"; 
+import Editcollection from "./pages/Editcollection/Editcollection";
 function App() {
   return (
     <div className="App font-opensans">
