@@ -1,3 +1,3 @@
-const  BASEURL  = "http://localhost:3001"; 
+const BASEURL = "http://watchstock-server.tententgc.com"; 
 
 export default  BASEURL;
