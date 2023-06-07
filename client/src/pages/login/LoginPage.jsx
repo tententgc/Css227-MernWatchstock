@@ -122,12 +122,7 @@ const LoginPage = () => {
                 </p>
               )}
             </div>
-            <Link
-              to="/forget-password"
-              className="text-sm font-semibold text-primary"
-            >
-              Forgot password?
-            </Link>
+
             <button
               type="submit"
               disabled={!isValid || isLoading}

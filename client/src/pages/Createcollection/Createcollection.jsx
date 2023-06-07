@@ -16,6 +16,7 @@ import {
 import { useNavigate } from "react-router-dom"; 
 
 import ArrowBack from "@mui/icons-material/ArrowBack"
+import BASEURL from "../../data/Baseurl";
 
 
 const CreateCollection = () => {
@@ -60,7 +61,7 @@ const CreateCollection = () => {
         : {};
       console.log(account);
 
-      await axios.post("http://localhost:3001/api/posts", formData, config);
+      await axios.post(`${BASEURL}/api/posts`, formData, config);
       setTitle("");
       setBrand("");
       setSeries("");
