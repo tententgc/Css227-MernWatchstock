@@ -241,8 +241,8 @@ const handleUpdatePost = async () => {
               <MenuItem value="">Sort By</MenuItem>
               <MenuItem value="AZ">A-Z</MenuItem>
               <MenuItem value="ZA">Z-A</MenuItem>
-              <MenuItem value="newest">Newest</MenuItem>
-              <MenuItem value="oldest">Oldest</MenuItem>
+              <MenuItem value="newest">Date New-Old</MenuItem>
+              <MenuItem value="oldest">Date Old-new</MenuItem>
             </Select>
           </Grid>
         </Grid>
