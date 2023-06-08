@@ -30,8 +30,8 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { toast } from "react-hot-toast";
-import EditIcon from "@mui/icons-material/Edit"; 
-import SaveIcon from "@mui/icons-material/Save"; 
+import EditIcon from "@mui/icons-material/Edit";
+import SaveIcon from "@mui/icons-material/Save";
 
 const ListPage = () => {
   const [posts, setPosts] = useState([]);
@@ -44,9 +44,8 @@ const ListPage = () => {
   const [statusFilter, setStatusFilter] = useState("");
   const [sortedPosts, setSortedPosts] = useState([]);
   const [sortType, setSortType] = useState("");
-  const [showEditModal, setShowEditModal] = useState(false); 
-    const [selectedPost, setSelectedPost] = useState(null);
-
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [selectedPost, setSelectedPost] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -85,38 +84,41 @@ const ListPage = () => {
     setSortedPosts(filteredPosts);
   }, [searchTerm, statusFilter, posts]);
 
- useEffect(() => {
-   switch (sortType) {
-     case "AZ":
-       setSortedPosts(
-         [...posts].sort((a, b) => a.title.localeCompare(b.title))
-       );
-       break;
-     case "ZA":
-       setSortedPosts(
-         [...posts].sort((a, b) => b.title.localeCompare(a.title))
-       );
-       break;
-     case "newest":
+  useEffect(() => {
+    switch (sortType) {
+      case "AZ":
+        setSortedPosts(
+          [...posts].sort((a, b) => a.title.localeCompare(b.title))
+        );
+        break;
+      case "ZA":
+        setSortedPosts(
+          [...posts].sort((a, b) => b.title.localeCompare(a.title))
+        );
+        break;
+      case "newest":
+        setSortedPosts(
+          [...posts].sort(
+            (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+          )
+        );
+        break;
+      case "oldest":
+        setSortedPosts(
+          [...posts].sort(
+            (a, b) => new Date(a.createdAt) - new Date(b.createdAt)
+          )
+        );
+        break;
+      default:
        setSortedPosts(
          [...posts].sort(
            (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
          )
        );
-       break;
-     case "oldest":
-       setSortedPosts(
-         [...posts].sort(
-           (a, b) => new Date(a.createdAt) - new Date(b.createdAt)
-         )
-       );
-       break;
-     default:
-       setSortedPosts(posts);
-       break;
-   }
- }, [sortType, posts]);
-
+        break;
+    }
+  }, [sortType, posts]);
 
   const handleDelete = async (slug) => {
     const confirmation = window.confirm(
@@ -145,10 +147,10 @@ const ListPage = () => {
     setIsModalOpen(true);
   };
 
-  const handleEdit = (post) => { 
+  const handleEdit = (post) => {
     setSelectedPost(post);
-    setShowEditModal(true); 
-  }
+    setShowEditModal(true);
+  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -166,41 +168,40 @@ const ListPage = () => {
     }));
   };
 
+  const handleUpdateRequest = async () => {
+    try {
+      const account = localStorage.getItem("account");
+      const token = JSON.parse(account).token;
 
-const handleUpdateRequest = async () => {
-  try {
-    const account = localStorage.getItem("account");
-    const token = JSON.parse(account).token;
+      const formData = new FormData();
+      const postData = { ...selectedPost };
 
-    const formData = new FormData();
-    const postData = { ...selectedPost };
-
-    if (postData.postPicture && postData.postPicture[0]) {
-      formData.append("postPicture", postData.postPicture[0]);
-    }
-
-    delete postData.postPicture;
-    console.log(postData)
-    formData.append("document", JSON.stringify(postData));
-
-    const response = await axios.patch(
-      `${BaseUrl}/api/requests/admin/${selectedPost.slug}`,
-      formData,
-      {
-        headers: { Authorization: `Bearer ${token}` },
+      if (postData.postPicture && postData.postPicture[0]) {
+        formData.append("postPicture", postData.postPicture[0]);
       }
-    );
 
-    setPosts((prevPosts) =>
-      prevPosts.map((post) =>
-        post.slug === selectedPost.slug ? response.data : post
-      )
-    );
-    setShowEditModal(false);
-  } catch (error) {
-    console.log(error);
-  }
-};
+      delete postData.postPicture;
+      console.log(postData);
+      formData.append("document", JSON.stringify(postData));
+
+      const response = await axios.patch(
+        `${BaseUrl}/api/requests/admin/${selectedPost.slug}`,
+        formData,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
+      setPosts((prevPosts) =>
+        prevPosts.map((post) =>
+          post.slug === selectedPost.slug ? response.data : post
+        )
+      );
+      setShowEditModal(false);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const handleStatusChange = async (slug, status, post) => {
     try {
